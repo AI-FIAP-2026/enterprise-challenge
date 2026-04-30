@@ -45,10 +45,11 @@ Focado na **redução da assimetria informativa**. O sistema atua proativamente 
 ### 7. Vídeo Demonstrativo 📺 
 Assista à demonstração da solução e das interfaces:
 
-[![Campo Seguro](https://img.youtube.com/vi/jFAV5QEnn1Q/hqdefault.jpg)](https://www.youtube.com/embed/jFAV5QEnn1Q)
+[![Campo Seguro](https://img.youtube.com/vi/jFAV5QEnn1Q/hqdefault.jpg)](https://www.youtube.com/watch?v=jFAV5QEnn1Q)
 
 ### 8. Documentação de Referência 📄
+
 Para informações técnicas detalhadas, consulte o documento original:
-🔗 **[Sompo - Solução Campo Seguro.pdf](./Sompo%20-%20Solu%C3%A7%C3%A3o%20Campo%20Seguro.pdf)**
+- **[Sompo - Solução Campo Seguro.pdf](./Sompo%20-%20Solu%C3%A7%C3%A3o%20Campo%20Seguro.pdf)**
 ---
 *Este projeto é uma iniciativa acadêmica em parceria com a Sompo Seguros.*
