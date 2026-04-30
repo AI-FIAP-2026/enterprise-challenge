@@ -44,7 +44,8 @@ Focado na **redução da assimetria informativa**. O sistema atua proativamente 
 
 ### 7. Vídeo Demonstrativo 📺 
 Assista à demonstração da solução e das interfaces:
-👉 [Link para o Vídeo Demonstrativo](https://youtu.be/jFAV5QEnn1Q)
+
+[![Campo Seguro](https://img.youtube.com/vi/jFAV5QEnn1Q/hqdefault.jpg)](https://www.youtube.com/embed/jFAV5QEnn1Q)
 
 ### 8. Documentação de Referência 📄
 Para informações técnicas detalhadas, consulte o documento original:
