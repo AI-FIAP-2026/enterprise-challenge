@@ -28,4 +28,4 @@ if __name__ == "__main__":
     with open(OUTPUT_PATH, "w", encoding="utf-8") as f: #---> Abre o arquivo de saída no nível de escrita, usando encoding="utf-8" para garantir que os caracteres acentuados sejam salvos corretamente
         json.dump(pages, f, ensure_ascii=False, indent=2) #---> Salva a lista de páginas como um arquivo JSON, usando ensure_ascii=False para preservar caracteres e usando o indent=2 para formatar o JSON de forma mais legível
 
-        print(f"Extração concluída: {len(pages)} páginas salvas em {OUTPUT_PATH}")
+        print(f"Extração concluída: {len(pages)} páginas salvas em {OUTPUT_PATH}") #---> E exibimos uma mensagem indicando que a extração foi concluída, quantas páginas foram extraídas e onde o arquivo foi salvo

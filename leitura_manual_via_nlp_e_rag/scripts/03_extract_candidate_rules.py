@@ -83,4 +83,4 @@ if __name__ == "__main__": #---> O bloco principal do código é executado quand
         json.dump(all_candidates, f, ensure_ascii=False, indent=2) #---> E inserimos todas as regras candidatas nele
 
     print(f"Regras candidatas extraídas: {len(all_candidates)}") #---> Exibimos o número de regras candidatas extraídas
-    print(f"Arquivo salvo em: {OUTPUT_PATH}") #---> Exibimos o caminho onde esse arquivo das regras foi salvo
+    print(f"Arquivo salvo em: {OUTPUT_PATH}") #---> E exibimos o caminho onde esse arquivo das regras foi salvo

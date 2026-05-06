@@ -81,4 +81,4 @@ if __name__ == "__main__": #---> O bloco principal do código é executado quand
         json.dump(structured_rules, f, ensure_ascii=False, indent=2) #---> E salvamos a lista de regras estruturadas no formato JSON
 
     print(f"Regras estruturadas: {len(structured_rules)}") #---> Exibe a quantidade de regras estruturadas extraídas
-    print(f"Arquivo salvo em: {OUTPUT_PATH}") #---> Exibe o caminho onde salvamos o arquivo
+    print(f"Arquivo salvo em: {OUTPUT_PATH}") #---> E exibimos o caminho onde salvamos o arquivo

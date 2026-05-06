@@ -57,4 +57,4 @@ if __name__ == "__main__": #---> O bloco principal do código é executado quand
         json.dump(filtered, f, ensure_ascii=False, indent=2) #---> E exportamos o conteúdo do "filtrados" para ele e salvamos
 
     print(f"Páginas relevantes: {len(filtered)}") #---> Exibimos a quantidade de páginas filtradas salvas
-    print(f"Arquivo salvo em: {OUTPUT_PATH}") #---> Exibimos o caminho onde elas foram salvas
+    print(f"Arquivo salvo em: {OUTPUT_PATH}") #---> E exibimos o caminho onde elas foram salvas
