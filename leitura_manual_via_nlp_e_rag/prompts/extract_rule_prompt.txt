@@ -1,0 +1,35 @@
+Você é um especialista em extração de regras técnicas de manuais de máquinas agrícolas.
+
+Sua tarefa é transformar o trecho abaixo em uma regra estruturada.
+
+Retorne somente JSON válido, sem markdown.
+
+Campos obrigatórios:
+{
+  "eh_regra": true ou false,
+  "tipo_regra": "manutencao" | "seguranca" | "operacao" | "combustivel" | "temperatura" | "outro",
+  "acao": "",
+  "componente": "",
+  "condicao": "",
+  "frequencia": "",
+  "limite": "",
+  "unidade": "",
+  "consequencia": "",
+  "criticidade": "baixa" | "media" | "alta" | "critica",
+  "sensor_possivel": "",
+  "metrica_sensor": "",
+  "alerta_sugerido": "",
+  "evidencia_textual": ""
+}
+
+Critérios:
+- Se houver PERIGO, criticidade deve ser crítica.
+- Se houver ATENÇÃO ou CUIDADO, criticidade deve ser alta.
+- Se houver IMPORTANTE, criticidade deve ser alta.
+- Se citar temperatura, extraia valor e unidade.
+- Se citar horas, extraia frequência.
+- Se citar diesel, combustível ou ppm, classifique como combustivel.
+- Se não for uma regra acionável, use "eh_regra": false.
+
+Trecho:
+{{TRECHO}}
