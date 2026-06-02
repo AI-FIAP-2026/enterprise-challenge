@@ -6,9 +6,9 @@ import pandas as pd
 import oracledb
 import plotly.express as px
 
-ORACLE_USER = "rm568906"
-ORACLE_PASSWORD = "fiap26"
-ORACLE_DSN = "oracle.fiap.com.br:1521/orcl"
+ORACLE_USER = st.secrets["ORACLE_USER"]
+ORACLE_PASSWORD = st.secrets["ORACLE_PASSWORD"]
+ORACLE_DSN = st.secrets["ORACLE_DSN"]
 
 st.set_page_config(layout="wide", page_title="Dashboard Agrícola")
 
