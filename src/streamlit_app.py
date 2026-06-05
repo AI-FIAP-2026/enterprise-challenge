@@ -1,8 +1,27 @@
+import sys
+from pathlib import Path
+
 import pandas as pd
 import oracledb
 import plotly.express as px
 import streamlit as st
 from datetime import datetime
+
+SRC_DIR = Path(__file__).resolve().parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+try:
+    from ml_model import predict_score as ml_predict_score
+    from ml_model.config import BEST_MODEL_PATH as ML_BEST_PATH
+    ML_AVAILABLE = ML_BEST_PATH.exists()
+except Exception as _ml_import_err:
+    ML_AVAILABLE = False
+    ml_predict_score = None
+    def _ml_unavailable(*_a, **_k):
+        return {"score": 0, "rotulo": "Indisponivel", "bg": "#ECEFF1", "fg": "#546E7A",
+                "probabilidade": 0.0, "erro": str(_ml_import_err)}
+    ml_predict_score = _ml_unavailable
 
 st.set_page_config(layout="wide", page_title="Campo Seguro")
 
@@ -10,7 +29,7 @@ ORACLE_USER = st.secrets["ORACLE_USER"]
 ORACLE_PASSWORD = st.secrets["ORACLE_PASSWORD"]
 ORACLE_DSN = st.secrets["ORACLE_DSN"]
 
-has_auth = "auth" in st.secrets and "client_id" in st.secrets["auth"]
+has_auth = "auth" in st.secrets and "google" in st.secrets["auth"]
 
 if has_auth:
     if not st.user.get("is_logged_in", False):
@@ -378,6 +397,26 @@ def page_scorerisk():
             </div>
             """, unsafe_allow_html=True)
         st.warning("Não há dados disponíveis para o município selecionado.")
+
+        st.divider()
+        st.markdown('<h3>🤖 Score Preditivo (modelo supervisionado)</h3>', unsafe_allow_html=True)
+        if ML_AVAILABLE:
+            ml_res = ml_predict_score(uf_sel, mun_sel, datetime.now().date())
+            st.markdown(f"""
+            <div style="text-align:center; padding:24px; border:2px solid #1A4A75; border-radius:15px;
+                        background-color:{ml_res['bg']};">
+                <p style="font-size:1.1em; margin:0; color:{ml_res['fg']};">Score preditivo (0-100)</p>
+                <p style="font-size:5em; font-weight:bold; color:{ml_res['fg']}; margin:0; line-height:1;">{ml_res['score']}</p>
+                <p style="font-size:1.4em; color:{ml_res['fg']}; font-weight:bold; margin:8px 0 0 0;">{ml_res['rotulo']}</p>
+                <p style="font-size:0.8em; color:#444; margin-top:8px;">
+                    P(evento climatico severo) = {ml_res['probabilidade']:.1%}
+                </p>
+            </div>
+            """, unsafe_allow_html=True)
+        else:
+            st.info(
+                "Modelo preditivo nao treinado. Rode `python -m ml.py train` para habilitar."
+            )
         return
 
     num_events = len(mun_data)
@@ -463,6 +502,38 @@ def page_scorerisk():
             <p style="font-size:0.8em; color:gray;">Escala 1 (crítico) a 5 (baixo risco)</p>
         </div>
         """, unsafe_allow_html=True)
+
+    st.divider()
+    st.markdown('<h3>🤖 Score Preditivo (modelo supervisionado)</h3>', unsafe_allow_html=True)
+    if ML_AVAILABLE:
+        ml_res = ml_predict_score(uf_sel, mun_sel, datetime.now().date())
+        ml_score = ml_res["score"]
+        ml_rotulo = ml_res["rotulo"]
+        ml_bg = ml_res["bg"]
+        ml_fg = ml_res["fg"]
+        ml_prob = ml_res["probabilidade"]
+        st.markdown(f"""
+        <div style="text-align:center; padding:24px; border:2px solid #1A4A75; border-radius:15px;
+                    background-color:{ml_bg};">
+            <p style="font-size:1.1em; margin:0; color:{ml_fg};">Score preditivo (0-100)</p>
+            <p style="font-size:5em; font-weight:bold; color:{ml_fg}; margin:0; line-height:1;">{ml_score}</p>
+            <p style="font-size:1.4em; color:{ml_fg}; font-weight:bold; margin:8px 0 0 0;">{ml_rotulo}</p>
+            <p style="font-size:0.8em; color:#444; margin-top:8px;">
+                P(evento climatico severo) = {ml_prob:.1%} &middot; modelo: GradientBoosting / RandomForest
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+        st.caption(
+            "Modelo treinado em ~36.500 linhas (fazenda x dia, ultimos 10 anos) com 21 features "
+            "climaticas + janela rolante + anomalia sazonal. Split temporal: treino ate 2022, "
+            "teste 2023+. Veja `data/model_comparison.csv`, `data/confusion_matrix.png` e "
+            "`data/correlation_matrix.csv`."
+        )
+    else:
+        st.warning(
+            "Modelo preditivo nao treinado. Rode `python -m ml.py train` (ou `python -m ml.py all`) "
+            "para gerar `src/models/risk_best.joblib` e entao recarregue esta pagina."
+        )
 
     st.divider()
     st.markdown('<h3>Registros de eventos</h3>', unsafe_allow_html=True)
