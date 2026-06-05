@@ -1,0 +1,116 @@
+<mxGraphModel adaptiveColors="auto">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <mxCell id="zone1" value="" style="group;pointerEvents=0;" vertex="1" parent="1">
+      <mxGeometry x="30" y="60" width="260" height="640" as="geometry"/>
+    </mxCell>
+    <mxCell id="zone1-bg" value="" style="rounded=1;fillColor=#e8f5e9;strokeColor=#4caf50;strokeWidth=2;dashed=1;html=1;" vertex="1" parent="zone1">
+      <mxGeometry width="260" height="640" as="geometry"/>
+    </mxCell>
+    <mxCell id="zone1-title" value="&lt;b&gt;ZONA DE BORDA (EDGE)&lt;/b&gt;&lt;br&gt;e Disponibilidade de Dados" style="text;align=center;fontSize=13;fontStyle=1;fontColor=#2e7d32;html=1;fillColor=#c8e6c9;rounded=1;strokeColor=#4caf50;" vertex="1" parent="zone1">
+      <mxGeometry x="10" y="10" width="240" height="36" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="zone2" value="" style="group;pointerEvents=0;" vertex="1" parent="1">
+      <mxGeometry x="340" y="60" width="280" height="640" as="geometry"/>
+    </mxCell>
+    <mxCell id="zone2-bg" value="" style="rounded=1;fillColor=#e3f2fd;strokeColor=#1976d2;strokeWidth=2;dashed=1;html=1;" vertex="1" parent="zone2">
+      <mxGeometry width="280" height="640" as="geometry"/>
+    </mxCell>
+    <mxCell id="zone2-title" value="&lt;b&gt;ZONA DE PROCESSAMENTO CORE&lt;/b&gt;&lt;br&gt;e Inteligência" style="text;align=center;fontSize=13;fontStyle=1;fontColor=#1565c0;html=1;fillColor=#bbdefb;rounded=1;strokeColor=#1976d2;" vertex="1" parent="zone2">
+      <mxGeometry x="10" y="10" width="260" height="36" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="zone3" value="" style="group;pointerEvents=0;" vertex="1" parent="1">
+      <mxGeometry x="670" y="60" width="260" height="640" as="geometry"/>
+    </mxCell>
+    <mxCell id="zone3-bg" value="" style="rounded=1;fillColor=#fff3e0;strokeColor=#f57c00;strokeWidth=2;dashed=1;html=1;" vertex="1" parent="zone3">
+      <mxGeometry width="260" height="640" as="geometry"/>
+    </mxCell>
+    <mxCell id="zone3-title" value="&lt;b&gt;ZONA DE SUPORTE À DECISÃO&lt;/b&gt;&lt;br&gt;e Interfaces" style="text;align=center;fontSize=13;fontStyle=1;fontColor=#e65100;html=1;fillColor=#ffe0b2;rounded=1;strokeColor=#f57c00;" vertex="1" parent="zone3">
+      <mxGeometry x="10" y="10" width="240" height="36" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-tractor" value="Maquinário Agrícola" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2e7d32;strokeColor=#1b5e20;fontColor=#ffffff;fontSize=11;fontStyle=1;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="75" y="105" width="170" height="50" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-iot" value="&lt;b&gt;Datalogger IoT&lt;/b&gt;&lt;br&gt;GPS, Trepidação,&lt;br&gt;Temperatura, Umidade" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#4caf50;strokeColor=#2e7d32;fontColor=#ffffff;fontSize=11;arcSize=6;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="75" y="180" width="170" height="75" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-clima" value="&lt;b&gt;APIs Públicas de Clima&lt;/b&gt;&lt;br&gt;INPE / CEMADEN" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#66bb6a;strokeColor=#388e3c;fontColor=#ffffff;fontSize=11;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="75" y="280" width="170" height="65" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-manual" value="&lt;b&gt;Assets de Conhecimento&lt;/b&gt;&lt;br&gt;Manuais de Fabricantes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#81c784;strokeColor=#388e3c;fontColor=#ffffff;fontSize=11;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="75" y="370" width="170" height="65" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-atuarial" value="&lt;b&gt;Modelagem Preditiva&lt;br&gt;Atuarial&lt;/b&gt;&lt;br&gt;Prêmios e Sinistros" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1976d2;strokeColor=#0d47a1;fontColor=#ffffff;fontSize=11;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="385" y="105" width="190" height="75" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-nlp" value="&lt;b&gt;Motor de NLP&lt;/b&gt;&lt;br&gt;Extração de Trilhas&lt;br&gt;e Checklists" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#42a5f5;strokeColor=#1565c0;fontColor=#ffffff;fontSize=11;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="385" y="205" width="190" height="75" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-incentivo" value="&lt;b&gt;Motor de Incentivos&lt;/b&gt;&lt;br&gt;Cálculo de Pontos&lt;br&gt;e Descontos" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e88e5;strokeColor=#0d47a1;fontColor=#ffffff;fontSize=11;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="385" y="310" width="190" height="75" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-app" value="&lt;b&gt;App Campo Seguro&lt;/b&gt;&lt;br&gt;Interface do Segurado" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ef6c00;strokeColor=#bf360c;fontColor=#ffffff;fontSize=11;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="710" y="310" width="180" height="75" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="n-datalake" value="&lt;b&gt;Data Lake&lt;br&gt;Corporativo&lt;/b&gt;&lt;br&gt;Equipe Sompo / Atuarial" style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#ff9800;strokeColor=#e65100;fontColor=#ffffff;fontSize=11;spacing=8;" vertex="1" parent="1">
+      <mxGeometry x="730" y="520" width="140" height="90" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e1" value="Telemetria para Auditabilidade" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#546e7a;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#37474f;" edge="1" source="n-iot" target="n-datalake" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e2" value="Dados de Uso" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1565c0;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#1565c0;" edge="1" source="n-iot" target="n-incentivo" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e3" value="Alertas Preventivos Extremos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2e7d32;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#2e7d32;" edge="1" source="n-clima" target="n-app" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e4" value="Fatores Climáticos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1565c0;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#1565c0;" edge="1" source="n-clima" target="n-incentivo" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e5" value="Leitura de Manuais" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2e7d32;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#2e7d32;" edge="1" source="n-manual" target="n-nlp" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e6" value="Regras de Manutenção" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1565c0;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#1565c0;" edge="1" source="n-nlp" target="n-incentivo" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e7" value="Baseline de Risco" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#1565c0;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#1565c0;" edge="1" source="n-atuarial" target="n-incentivo" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e8" value="Score Inicial" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#2e7d32;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#2e7d32;" edge="1" source="n-atuarial" target="n-app" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e9" value="Envio Voluntário e Checklists" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ef6c00;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#e65100;" edge="1" source="n-app" target="n-incentivo" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e9b" value="Status e Pontos" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#ef6c00;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#e65100;" edge="1" source="n-incentivo" target="n-app" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+
+    <mxCell id="e10" value="Dados Consolidados e Scores" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;strokeColor=#e65100;strokeWidth=2;endArrow=classic;fontSize=10;fontColor=#e65100;" edge="1" source="n-incentivo" target="n-datalake" parent="1">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+  </root>
+</mxGraphModel>
