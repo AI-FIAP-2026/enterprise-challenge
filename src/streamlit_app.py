@@ -1,8 +1,22 @@
+import sys
+from pathlib import Path
+
 import pandas as pd
 import oracledb
 import plotly.express as px
 import streamlit as st
 from datetime import datetime
+
+SRC_DIR = Path(__file__).resolve().parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
+
+try:
+    from ml_model import predict_impacto_range as ml_predict_impacto_range
+    ML_IMPACTO_AVAILABLE = True
+except Exception as _ml_import_err:
+    ML_IMPACTO_AVAILABLE = False
+    ml_predict_impacto_range = lambda *_a, **_k: pd.DataFrame()
 
 st.set_page_config(layout="wide", page_title="Campo Seguro")
 
@@ -214,6 +228,14 @@ def alert_pie_color(alert_type):
     return "#C8E6C9"
 
 
+# ─── Projecao ML de IMPACTO_TOTAL (14 dias) ───
+
+@st.cache_data(ttl=3600, show_spinner="Carregando previsao Open-Meteo + projecao do modelo de impacto...")
+def _cached_impacto_projection(uf: str, municipio: str) -> pd.DataFrame:
+    """Prediz IMPACTO_TOTAL (R$) diario para os proximos 14 dias via Open-Meteo."""
+    return ml_predict_impacto_range(uf, municipio, days=14)
+
+
 # ═══════════════════════════════════════════════════════════
 # PAGE: Alertas (US-002)
 # ═══════════════════════════════════════════════════════════
@@ -392,65 +414,112 @@ def page_scorerisk():
 
     st.markdown(f'<h3>📌 Eventos em {mun_sel}/{uf_sel}</h3>', unsafe_allow_html=True)
 
-    mun_data_plot = mun_data.copy()
-    mun_data_plot["tipo_resumido"] = mun_data_plot["cobrade"].str.split(" - ").str[1]
-    mun_data_plot["impacto_agri_milhoes"] = mun_data_plot["impacto_agricultura"] / 1e6
-    mun_data_plot["impacto_total_milhoes"] = mun_data_plot["impacto_total"] / 1e6
-    mun_data_plot["marker_size"] = mun_data_plot["impacto_agri_milhoes"].clip(lower=2)
+    proj_df = _cached_impacto_projection(uf_sel, mun_sel)
 
-    fig = px.scatter(
-        mun_data_plot, x="registro", y="impacto_total_milhoes",
-        size="marker_size", color="tipo_resumido",
-        hover_data={
-            "cobrade": True,
-            "impacto_agri_milhoes": ":.2f",
-            "marker_size": False,
-        },
-        labels={
-            "registro": "Data do evento",
-            "impacto_total_milhoes": "Impacto econômico total (R$ milhões)",
-            "impacto_agri_milhoes": "Impacto na agricultura (R$ milhões)",
-            "tipo_resumido": "Tipo de evento",
-            "cobrade": "Evento",
-        },
-        title=f"Eventos climáticos em {mun_sel}/{uf_sel}",
-        height=500,
-        color_discrete_sequence=PIE_COLOR_SEQUENCE,
-    )
-    fig.update_layout(
-        font_family="Roboto",
-        title_font_family="Montserrat",
-        hoverlabel=dict(font_size=12),
-        legend_title_text="Tipo de evento",
-    )
-    fig.update_traces(
-        hovertemplate=(
-            "<b>%{customdata[0]}</b><br>"
-            "Data: %{x|%d/%m/%Y}<br>"
-            "Impacto Total: R$ %{y:.2f}M<br>"
-            "Impacto Agricultura: R$ %{marker.size:.2f}M<extra></extra>"
+    hist_df = mun_data.copy()
+    hist_df["origem"] = "Histórico"
+    hist_df["tipo_resumido"] = hist_df["cobrade"].str.split(" - ").str[1]
+    hist_df["impacto_total_milhoes"] = hist_df["impacto_total"] / 1e6
+    hist_df["impacto_agri_milhoes"] = hist_df["impacto_agricultura"] / 1e6
+    hist_df["marker_size"] = hist_df["impacto_agri_milhoes"].clip(lower=2)
+    hist_df = hist_df.rename(columns={"registro": "data"})
+
+    has_proj = proj_df is not None and not proj_df.empty
+    if has_proj:
+        proj_plot = pd.DataFrame({
+            "data": pd.to_datetime(proj_df["date"]),
+            "cobrade": "Projeção ML (impacto previsto)",
+            "tipo_resumido": "Projeção ML",
+            "impacto_total_milhoes": proj_df["impacto_total_previsto"] / 1e6,
+            "impacto_agri_milhoes": proj_df["impacto_agricultura_previsto"] / 1e6,
+            "marker_size": 8.0,
+            "origem": "Projeção ML",
+        })
+        combined = pd.concat([hist_df, proj_plot], ignore_index=True)
+    else:
+        combined = hist_df
+
+    if combined.empty:
+        st.info("Sem dados de eventos para exibir.")
+    else:
+        fig = px.scatter(
+            combined,
+            x="data", y="impacto_total_milhoes",
+            size="marker_size", color="origem",
+            symbol="origem",
+            symbol_map={"Histórico": "circle", "Projeção ML": "diamond"},
+            color_discrete_map={"Histórico": "#1A4A75", "Projeção ML": "#388E3C"},
+            hover_data={
+                "cobrade": True,
+                "impacto_agri_milhoes": ":.2f",
+                "marker_size": False,
+                "origem": True,
+            },
+            labels={
+                "data": "Data do evento",
+                "impacto_total_milhoes": "Impacto econômico total (R$ milhões)",
+                "impacto_agri_milhoes": "Impacto na agricultura (R$ milhões)",
+                "cobrade": "Evento",
+                "origem": "Origem",
+            },
+            title=f"Eventos climáticos em {mun_sel}/{uf_sel}",
+            height=500,
         )
-    )
-    fig.update_layout(
-        font_family="Roboto",
-        title_font_family="Montserrat",
-        hoverlabel=dict(font_size=12),
-    )
-    st.plotly_chart(fig, use_container_width=True)
+        fig.update_layout(
+            font_family="Roboto",
+            title_font_family="Montserrat",
+            hoverlabel=dict(font_size=12),
+            legend_title_text="Origem",
+        )
+        fig.update_traces(
+            hovertemplate=(
+                "<b>%{customdata[0]}</b><br>"
+                "Data: %{x|%d/%m/%Y}<br>"
+                "Origem: %{customdata[2]}<br>"
+                "Impacto Total: R$ %{y:.2f}M<br>"
+                "Impacto Agricultura: R$ %{marker.size:.2f}M<extra></extra>"
+            )
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+        if has_proj:
+            st.caption(
+                "**Projeção ML:** regressor "
+                "`HistGradientBoostingRegressor` (loss=Tweedie) treinado em 10 anos de "
+                "CS_CLIMA + IMPACTO_TOTAL (R$). Horizonte: 14 dias via Open-Meteo. "
+                "Previsões negativas são truncadas em 0. "
+                "Para retreinar: `python src/ml.py impacto train`."
+            )
+        else:
+            st.caption(
+                "Projeção ML indisponível (modelo de impacto não treinado, ou "
+                "município sem fazenda com coordenadas em `CS_FAZENDAS`, ou Open-Meteo offline). "
+                "Para habilitar: `python src/ml.py impacto train`."
+            )
 
     col_info, col_score_display = st.columns([2, 1])
 
     with col_info:
         st.markdown('<h3>Resumo</h3>', unsafe_allow_html=True)
-        st.markdown(f"""
-        | Indicador | Valor |
-        |-----------|-------|
-        | **Total de eventos** | {num_events} |
-        | **Impacto econômico total** | R$ {total_impact:,.2f} |
-        | **Pontuação de frequência** | {freq_pts} ({FREQ_LABEL[freq_pts]}) |
-        | **Pontuação de impacto** | {impact_pts} ({IMPACT_LABEL[impact_pts]}) |
-        | **Tipos de eventos** | {mun_data["cobrade"].nunique()} |
-        """)
+        resumo_rows = [
+            f"| **Total de eventos** | {num_events} |",
+            f"| **Impacto econômico total** | R$ {total_impact:,.2f} |",
+            f"| **Pontuação de frequência** | {freq_pts} ({FREQ_LABEL[freq_pts]}) |",
+            f"| **Pontuação de impacto** | {impact_pts} ({IMPACT_LABEL[impact_pts]}) |",
+            f"| **Tipos de eventos** | {mun_data['cobrade'].nunique()} |",
+        ]
+        if has_proj:
+            proj_total = float(proj_df["impacto_total_previsto"].sum())
+            proj_peak_idx = proj_df["impacto_total_previsto"].idxmax()
+            proj_peak_date = pd.Timestamp(proj_df.loc[proj_peak_idx, "date"]).strftime("%d/%m/%Y")
+            proj_peak_val = float(proj_df.loc[proj_peak_idx, "impacto_total_previsto"])
+            resumo_rows.append(
+                f"| **Impacto previsto 14d (total)** | R$ {proj_total:,.2f} |"
+            )
+            resumo_rows.append(
+                f"| **Pico projetado** | {proj_peak_date} (R$ {proj_peak_val:,.2f}) |"
+            )
+        st.markdown("| Indicador | Valor |\n|-----------|-------|\n" + "\n".join(resumo_rows))
 
     with col_score_display:
         st.markdown('<h3>Score risk</h3>', unsafe_allow_html=True)

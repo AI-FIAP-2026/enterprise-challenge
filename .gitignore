@@ -1,2 +1,11 @@
 .streamlit/secrets.toml
 venv
+.playwright-cli
+__pycache__
+*.pyc
+
+# ML artifacts (regeneraveis via `python src/ml.py all`)
+src/models/*.joblib
+data/cache/
+data/*.png
+data/*.csv
