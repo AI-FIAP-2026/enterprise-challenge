@@ -2,9 +2,7 @@
 
 *Campo Seguro* é uma plataforma integrada de monitoramento e gestão de riscos para o agronegócio, desenvolvida para a **Sompo Seguros**. A solução abarcará sensores IoT, Inteligência Artificial (NLP) e dados meteorológicos para prevenir sinistros, reduzir prejuízos operacionais e estreitar a relação entre seguradora e produtor rural.
 
-
 ---
-
 
 ### 1. Introdução
 O projeto aborda o aumento de 80% nos desastres naturais no Brasil e a oportunidade para desenvolver soluções que contribuam para amenizar seus impactos. A plataforma Campo Segura foca em mitigar o impacto da volatilidade climática no valor das apólices e na sustentabilidade do seguro agrícola.
@@ -65,7 +63,7 @@ Nessa sprint, alocamos nossos esforços para organizar a estrutura que irá forn
 - **Síntese e oportunidades de melhoria**: nesse sprint focamos nossos esforços em organizar o projeto, a partir da estruturação do backend. A partir dos resultados já disponíveis, ampliaremos nossa produtividade para avançar mais profundamente nas partes faltantes do projeto e também melhorar nosso modelo preditivo.
 
 
-### 4. Plano de entregas 📅
+### 4. Plano de entregas
 
 | Sprint       | Período | Foco Principal | Entregas Detalhadas                                                                             |
 |:-------------| :--- | :--- |:------------------------------------------------------------------------------------------------|
