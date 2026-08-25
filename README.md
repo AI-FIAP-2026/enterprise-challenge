@@ -1,8 +1,6 @@
 # Projeto Campo Seguro
 
-![Logo - Campo Seguro](./assets/logo.png)
-
-O *Campo Seguro* é uma plataforma integrada de monitoramento e gestão de riscos para o agronegócio, desenvolvida para a **Sompo Seguros**. A solução abarcará sensores IoT, Inteligência Artificial (NLP) e dados meteorológicos para prevenir sinistros, reduzir prejuízos operacionais e estreitar a relação entre seguradora e produtor rural.
+*Campo Seguro* é uma plataforma integrada de monitoramento e gestão de riscos para o agronegócio, desenvolvida para a **Sompo Seguros**. A solução abarcará sensores IoT, Inteligência Artificial (NLP) e dados meteorológicos para prevenir sinistros, reduzir prejuízos operacionais e estreitar a relação entre seguradora e produtor rural.
 
 
 ---
@@ -128,7 +126,7 @@ Para informações técnicas detalhadas, consulte o documento original:
 
 ### 9. Repositório GitHub
 
-https://github.com/AI-FIAP-2026/enterprise-challenge/
+https://github.com/AI-FIAP-2026/enterprise-challenge/tree/campo-seguro-v2
 
 ---
 *Este projeto é uma iniciativa acadêmica em parceria com a Sompo Seguros.*
