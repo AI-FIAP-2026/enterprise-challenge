@@ -4,7 +4,9 @@
 
 O *Campo Seguro* é uma plataforma integrada de monitoramento e gestão de riscos para o agronegócio, desenvolvida para a **Sompo Seguros**. A solução abarcará sensores IoT, Inteligência Artificial (NLP) e dados meteorológicos para prevenir sinistros, reduzir prejuízos operacionais e estreitar a relação entre seguradora e produtor rural.
 
+
 ---
+
 
 ### 1. Introdução
 O projeto aborda o aumento de 80% nos desastres naturais no Brasil e a oportunidade para desenvolver soluções que contribuam para amenizar seus impactos. A plataforma Campo Segura foca em mitigar o impacto da volatilidade climática no valor das apólices e na sustentabilidade do seguro agrícola.
@@ -37,9 +39,9 @@ Complementam a sprint:
 Nessa sprint, alocamos nossos esforços para organizar a estrutura que irá fornecer o alicerce para o crescimento e evolução dos principais épicos da solução Campo Seguro. Nessa reestruturação, grande parte dos desenvolvimentos passados foram descontinuados.
 
 - **Ampliação das integrações disponíveis**: inclusão de alertas sobre queimadas (INPE) e risco hidrológico (Cemaden) que são rodados periodicamente.
-
+  
 - **Reestruturação do banco de dados**: criamos novas tabelas para tornar a solução mais escalável: usuários, municípios do Brasil com codígo IBGE e informações geográficas (latitude e longitude) e logs do pipeline.
-
+  
 - **Tratamento da base de dados existente**: diante das dificuldades enfrentadas na sprint passada, alocamos bastante tempo para tratar os registros da Defesa Civil sobre eventos climáticos extremos, uniformizamos os dados (correção do nome dos municípios, inclusão de código do IBGE, entre oturos), excluímos erros de valores financeiros impossíveis, o que resultou em uma base de cerca de 70 mil registros sobre desastres nos últimos 10 anos.
 
 - **Inclusão de dados massivos do clima**: foram incluídos mais de 60 milhões de registros sobre temperatura, velocidade do vento, precipitação e umidade para contextualizar a situação nos dias que antecederam o desastre. Para eventos de estiagem e incêndio integramos dados de 90 dias antes do incidente, de hora em hora, para todos os municípios impactados. Para incidentes hidrológicos buscamos informações 30 dias antes.
@@ -117,7 +119,7 @@ https://youtu.be/3DVutjk-RAA
 
 #### Sprint 3 - Estruturação do Backend
 
-TBD
+https://youtu.be/2iyq1lpY2o4
 
 ### 8. Documentação de Referência
 
