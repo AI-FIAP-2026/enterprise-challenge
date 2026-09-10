@@ -1,0 +1,12 @@
+pymupdf
+pdfplumber
+pandas
+tqdm
+spacy
+nltk
+requests
+python-dotenv
+sentence-transformers
+chromadb
+streamlit
+openpyxl
