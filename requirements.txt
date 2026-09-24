@@ -10,3 +10,4 @@ sentence-transformers
 chromadb
 streamlit
 openpyxl
+pyyaml

@@ -1,6 +1,6 @@
 # Campo Seguro — Memória do Projeto (módulo NLP + Score de Risco do Equipamento)
 
-> Última atualização: 2026-09-24 · Mantenedor: Heitor · Uso: cole este arquivo no início de uma nova conversa com o Claude para restaurar o contexto. Atualize a seção 7 (Decisões) e 10 (Pendências) a cada assunto concluído.
+> Última atualização: 2026-09-24 · Mantenedor: Heitor Exposito de Sousa. Log de decisões técnicas do módulo NLP + score de risco do equipamento, consolidado incrementalmente ao longo do desenvolvimento (seções 7 e 10 são atualizadas a cada marco concluído).
 
 ---
 
@@ -83,14 +83,16 @@ Defeitos medidos:
 | Categoria | Risco | Peso | Faixas 1 / 2 / 3 |
 |---|---|---|---|
 | Cliente | Valor segurado total | 0,05 | ≤ 500 mil / 500 mil–1,5 mi / > 1,5 mi |
-| Cliente | Histórico do cliente | 0,25 | ≥ 80 % conformidade / 51–80 % / novo ou ≤ 50 % |
-| Cliente | Sinistros na região (10 anos) | 0,025 | 0 / ≤ 2 / > 2 |
-| Ambiental | Queimadas | 0,10 | a definir |
-| Ambiental | Hidrológico | 0,10 | a definir |
-| Ambiental | Eventos extremos | 0,025 | a definir |
-| Operacional | Climático (danos ao equipamento) | 0,05 | a definir |
-| Operacional | **Complexidade da manutenção** (qtd itens × periodicidade) | **0,25** | a definir — **alimentado pelo NLP** |
-| Operacional | Procedimentos de manutenção (questionário) | 0,15 | a definir |
+| Cliente | Histórico do cliente | 0,20 | conformidade ≥ 80 % em ambos critérios / 51–80 % em algum / novo cliente ou ≤ 50 % |
+| Cliente | Sinistros na região (10 anos) | 0,075 | sem sinistros / sinistros ≤ 20 % do valor segurado histórico / novo cliente ou > 20 % |
+| Ambiental | Queimadas | 0,10 | risco região ≤ 10 % / 10–30 % / ≥ 30 % |
+| Ambiental | Hidrológico | 0,10 | risco região ≤ 10 % / 10–30 % / ≥ 30 % |
+| Ambiental | Eventos extremos | 0,025 | risco região ≤ 10 % / 10–30 % / ≥ 30 % |
+| Operacional | Climático (danos ao equipamento) | 0,05 | risco região ≤ 10 % / 10–30 % / ≥ 30 % |
+| Operacional | **Complexidade da manutenção** (qtd de orientações em 5 anos) | **0,25** | **≤ 20 / 20–40 / ≥ 40 — alimentado pelo NLP (nosso output)** |
+| Operacional | Procedimentos de manutenção (questionário) | 0,15 | maturidade ≤ 50 % / 50–80 % / ≥ 80 % |
+
+Pesos atualizados em 2026-09-24 (fonte: `FIAP_Sompo_S3_Analise_equipamentos - 2026.09.23.xlsx`, aba Score, versão compartilhada pela Nádia). Somam 1,00.
 
 - **User Stories**: US-001 (score de exposição climática por município, 1–5 com **5 = baixo risco** — direção invertida em relação à régua); US-002 (alertas: incêndio crítico T > 30 °C ∧ UR < 30 % ∧ vento > 30 km/h; UR < 12 % alto; T > 40 °C alto; operacional T < 5 °C ou > 30 °C alto; vento > 60 km/h alto, > 75 km/h crítico; umidade do solo 70–80 % moderado, 81–89 % alto, ≥ 90 % crítico/parada).
 
@@ -118,8 +120,16 @@ Equipamento + telemetria + clima (fazenda)
               Dashboard (Streamlit) por equipamento / região / operação · logs de decisão
 ```
 
-### Schema canônico (o da Nádia + 4 colunas)
-`cod_fonte_manual, nome_documento_origem, data_publicacao_manual, link_manual, tipo_orientacao, subsistema, acao_tecnica, detalhamento_orientacao, metrica_gatilho, valor_gatilho, unidade_medida, fator_condicional, texto_bruto_original, idioma_origem` **+** `pagina_origem (int), criticidade (BAIXA|MEDIA|ALTA|CRITICA), sinal_seguranca (PERIGO|ATENCAO|CUIDADO|IMPORTANTE|null), sensor_iot (TEMP_MOTOR|TEMP_HIDRAULICO|CARGA_MOTOR|HORIMETRO|GPS|ACELEROMETRO|TEMP_AMBIENTE|UMIDADE|null)`.
+### Schema — tabela Oracle real vs. dataset interno (⚠️ divergência encontrada em 2026-09-24)
+
+A Nádia já criou `CS_EQUIPAMENTOS_ORIENTACOES` no Oracle FIAP (status "Concluído" no backlog). Colunas reais (print do SQL Developer):
+`ID (PK, sequence), COD_FONTE_MANUAL (VARCHAR2(100) NOT NULL), TIPO_ORIENTACAO (VARCHAR2(100) NOT NULL), SUBSISTEMA (VARCHAR2(100) NOT NULL), ACAO_TECNICA (VARCHAR2(100) NOT NULL), DETALHAMENTO_ORIENTACAO (CLOB), METRICA_GATILHO (VARCHAR2(50)), VALOR_GATILHO (NUMBER(22,2)), UNIDADE_MEDIDA (VARCHAR2(50)), FATOR_CONDICIONAL (VARCHAR2(255)), TEXTO_BRUTO_ORIGINAL (CLOB)`.
+
+**Não existem** na tabela real: `nome_documento_origem, data_publicacao_manual, link_manual, idioma_origem` (ela comentou que vai criar uma **tabela auxiliar de manuais** para isso — estrutura ainda não compartilhada) nem `pagina_origem, criticidade, sinal_seguranca, sensor_iot` (as "4 colunas" que este documento registrava como decididas em §7, mas que não foram de fato adicionadas por ela).
+
+**Decisão (2026-09-24):** manter os 18 campos no **dataset interno** (CSV/JSON/XLSX — precisamos de `criticidade`/`sensor_iot` para o score §6 e `pagina_origem` para rastreabilidade do relatório), mas o `.sql` gerado usa **só as 11 colunas reais** da tabela dela (sem DDL novo, só INSERTs). Ver pendência em §10 sobre alinhar os 7 campos que ficam de fora.
+
+Campos do dataset interno (18): `cod_fonte_manual, nome_documento_origem, data_publicacao_manual, link_manual, tipo_orientacao, subsistema, acao_tecnica, detalhamento_orientacao, metrica_gatilho, valor_gatilho, unidade_medida, fator_condicional, texto_bruto_original, idioma_origem, pagina_origem (int), criticidade (BAIXA|MEDIA|ALTA|CRITICA), sinal_seguranca (PERIGO|ATENCAO|CUIDADO|IMPORTANTE|null), sensor_iot (TEMP_MOTOR|TEMP_HIDRAULICO|CARGA_MOTOR|HORIMETRO|GPS|ACELEROMETRO|TEMP_AMBIENTE|UMIDADE|null)`.
 
 Enums:
 - `tipo_orientacao`: `MANUTENCAO_PROGRAMADA | ALERTA_TEMP_MINIMA | ALERTA_TEMP_MAXIMA | RISCO_CHUVA_DESLIZE | LIMIAR_OPERACIONAL_SENSOR`
@@ -158,6 +168,8 @@ Enums:
 | 2026-09-24 | Abandonar Gemma-3-1B para estruturação | 0/10 PERIGO retidos; campos-chave vazios |
 | 2026-09-24 | Não clonar repo / não instalar LM Studio agora | Arquivos já disponíveis; camada A/B não usa LLM |
 | 2026-09-24 | Modelo Claude: seguir no atual; reavaliar se escopo mudar | Regra de governança da organização |
+| 2026-09-24 | Documentos de processo com IA (`CLAUDE.md`, `docs/prompt_claude_code.md`) ficam só locais (`.gitignore`), não vão para o repo avaliado | Risco de a banca interpretar como "terceirizado para IA"; a evidência de trabalho fica no `comparativo_v1_vs_deterministico.md` e no log de decisões, não no prompt |
+| 2026-09-24 | Dataset interno (CSV/JSON/XLSX) mantém os 18 campos; `.sql` gerado usa só as 11 colunas reais de `CS_EQUIPAMENTOS_ORIENTACOES` (sem DDL novo) | A tabela real da Nádia não tem os 4 campos extras nem os 4 de metadado do manual; não vamos alterar o schema dela sem alinhar |
 
 ---
 
@@ -187,16 +199,35 @@ Enums:
 
 ## 10. Pendências e próximos passos (ordem)
 
-1. **Confirmar sprint corrente** (S3 ou S4) e data de entrega.
-2. Fechar com a Nádia: schema final (+4 colunas), enum de subsistema, metadados reais dos manuais, remoção dos placeholders `storage.minhaseguradora.com`.
-3. **[A]** `parse_tables.py`: CH950 (sumário 95-A…L + seção 90-3) e 5060E (207-2 a 207-4 com notas a–l) → `CS_EQUIPAMENTOS_ORIENTACOES`.
-4. **[B]** `thresholds.py`: limiares da §4 → `LIMIAR_OPERACIONAL_SENSOR`.
-5. Decidir modelo para **[C]**; adaptar NPL 1/2/3 para entrada por página filtrada + saída em array; rodar; validar amostra.
-6. **[D]** score do equipamento 0–100 (pesos internos a definir com a Nádia).
-7. **[E]** ranking e geração dos 10–20 alertas.
-8. **[F]** dataset simulado + classificador + métricas; relatório de validação.
-9. Refatoração em pacote, `.env`, logging, exceções, testes; reindexar RAG sobre as orientações (não sobre páginas).
-10. README/diagrama/vídeo; obter manual Mahindra 6075.
+### Fase 1 — em andamento (prioridade atual)
+- [x] Parser CH950 (sumário 95-A…M): 131 itens de `MANUTENCAO_PROGRAMADA`.
+- [x] Parser 5060E (tabela 207-2 a 207-4 + notas a–l): 95 itens.
+- [x] Extrator de limiares de sensor (`extract_thresholds.py`): 13 limiares (10 CH950 + 3 5060E) com página real e regex validada contra o texto do manual.
+- [ ] **Exportação final** CSV/JSON/XLSX/SQL em `outputs/orientacoes/` — próximo passo, é o que a Nádia precisa pra contar linhas.
+- [ ] Mostrar 10 linhas de amostra por manual antes de considerar a exportação "final" (critério de aceite do kickoff).
+- [ ] Confirmar com a Nádia: como calcular "recomendações de manutenção em 5 anos" (peso 0,25) — hoje só temos contagem estática de itens do manual, não itens/5 anos.
+- [ ] Confirmar com a Nádia: estrutura da tabela auxiliar de manuais (`nome_documento_origem, data_publicacao_manual, link_manual, idioma_origem`) e se `pagina_origem, criticidade, sinal_seguranca, sensor_iot` entram como colunas em `CS_EQUIPAMENTOS_ORIENTACOES` ou ficam só no dataset interno do Heitor.
+- [ ] Obter manual Mahindra 6075 (ainda sem fonte real).
+- [ ] *(despriorizado até o prazo da Nádia passar)* Migração das 216 regras v1 → `comparativo_v1_vs_deterministico.md`.
+- [ ] *(despriorizado)* Testes automatizados (pytest com fixtures reais) + CLI reprodutível do zero.
+
+### Fase 2 — camada LLM (só começa com OK do Heitor)
+- [ ] Adaptar `04_structure_rules_with_llm.py` aos prompts NPL 1–3 da Nádia (entrada por página filtrada, saída no schema canônico).
+- [ ] Decidir modelo (LM Studio Gemma ≥ 4B ou API) — apresentar prós/contras e custo antes de rodar.
+
+### Fase 3 — Score + Alertas
+- [ ] **[D]** Score do equipamento 0–100 (pesos internos a fechar com a Nádia).
+- [ ] **[E]** Ranking e geração de **10–20 alertas** por equipamento (DO_NOT_DO: nunca <10 nem >20).
+- [ ] Integrar módulo NLP à estrutura da `main` (`app.py`, `pages/1_Alertas.py`, `pages/3_Score_Risk.py`, `servicos/`, `pipeline.py`) — a `main` já tem o Streamlit da Nádia/Vini rodando e é o destino final, não vamos criar tela nova.
+
+### Fase 4 — ML supervisionado + RAG
+- [ ] **[F]** Dataset simulado + classificador + matriz de confusão/F1/AUC; relatório de validação.
+- [ ] Logs de decisão (explicabilidade do score).
+- [ ] Reindexar RAG sobre as orientações estruturadas (não sobre páginas cruas).
+
+### Entrega final (Sprint 4)
+- [ ] README final, diagrama de arquitetura, vídeo ≤ 5 min.
+- [ ] Confirmar sprint corrente (S3 ou S4) e data de entrega exata.
 
 ---
 
@@ -211,10 +242,3 @@ Enums:
 - Não gerar mais de 20 nem menos de 10 alertas por equipamento.
 - Não inventar metadados de manual (datas, links).
 
----
-
-## 12. Governança da conversa com o Claude
-
-- Regra da organização: menor modelo capaz. Decisão registrada: seguir no modelo atual para arquitetura/análise; para tarefas simples (README, e-mails, SQL simples) usar Haiku; para refatoração e código usar Sonnet.
-- Compactar contexto ao fim de cada assunto; pedir respostas curtas quando possível.
-- Ao concluir assuntos importantes: atualizar §7 e §10 deste arquivo.

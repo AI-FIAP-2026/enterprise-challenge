@@ -1,0 +1,23 @@
+# Mapeamento "verbo/substantivo de ação no título" -> acao_tecnica canônica (docs/memoria.md §5).
+# Chave = regex testada contra o PRIMEIRO verbo do título já normalizado por
+# normalize.chave_normalizada (minúsculo, sem acento) — por isso os padrões
+# aqui também estão sem acento. A primeira que casar vence; ordem importa.
+
+mapeamento:
+  - ["^(verifique|verificar|verificacao)$", VERIFICAR]
+  - ["^(inspecione|inspecionar|inspecao)$", INSPECIONAR]
+  - ["^(troque|trocar|troca)$", TROCAR]
+  - ["^(substitua|substituir|substituicao|substitui)$", SUBSTITUIR]
+  - ["^(limpe|limpar|limpeza)$", LIMPAR]
+  - ["^(lubrifique|lubrificar|lubrificacao)$", LUBRIFICAR]
+  - ["^(drene|drenar|drenagem)$", DRENAR]
+  - ["^(ajuste|ajustar|ajustar\\w*)$", AJUSTAR]
+  - ["^(aperte|apertar|aperto)$", APERTAR]
+  - ["^(teste|testar)$", TESTAR]
+  - ["^(lavagem|lavar|lave)$", LAVAR]
+  - ["^(calibre|calibrar|calibracao)$", CALIBRAR]
+  - ["^(abasteca|abastecer|abastecimento)$", LUBRIFICAR]
+  - ["^(remocao|remova|remover)$", SUBSTITUIR]
+  - ["^(instalacao|instale|instalar)$", SUBSTITUIR]
+
+default: VERIFICAR

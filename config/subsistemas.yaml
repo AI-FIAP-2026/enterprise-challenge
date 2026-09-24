@@ -1,0 +1,47 @@
+# Mapeamento "texto do manual" -> enum de subsistema (docs/memoria.md §5).
+# Usado por campo_seguro/nlp/normalize.py. Editável sem mexer em código.
+
+enum:
+  - MOTOR
+  - COMBUSTIVEL
+  - ARREFECIMENTO
+  - TRANSMISSAO
+  - TREM_ACIONAMENTO
+  - HIDRAULICO
+  - FREIOS
+  - RODANTE_PNEUS
+  - ELETRICO
+  - CORTE_PROCESSAMENTO
+  - CABINE_ESTRUTURA
+  - CHASSI
+
+# 5060E: cabeçalho "Sistema" da tabela 207-2..4 -> enum.
+tratores_5060e:
+  "Motor": MOTOR
+  "Combustível, Admissão de Ar, Exaustão e Arrefecimento": ARREFECIMENTO
+  "Trem de acionamento": TREM_ACIONAMENTO
+  "Sistema Hidráulico": HIDRAULICO
+  "Rodas e Peças de Fixação": RODANTE_PNEUS
+  "Direção e Freios": FREIOS
+  "Plataforma do Operador": CABINE_ESTRUTURA
+  "Sistema Elétrico": ELETRICO
+
+# CH950: inferência por palavra-chave no título da tarefa (sumário 95-A..M),
+# checada em ordem — a primeira que casar vence.
+ch950_palavras_chave:
+  # ordem importa: buckets mais específicos primeiro — "motor" aparece como
+  # qualificador em muitos títulos que não são sobre o motor em si (ex.
+  # "Filtro Primário de Combustível (Se Equipado com Motor Final Tier 4...)"),
+  # por isso MOTOR fica por último, como o mais genérico.
+  - [["combustível", "diesel", "def ", "fluido para escapamento", "tanque de combustível", "admiss", "filtro primário", "filtro prim"], COMBUSTIVEL]
+  - [["arrefecimento", "radiador", "resfriador", "líquido de arrefecimento"], ARREFECIMENTO]
+  - [["redução final", "diferencial", "caixa de engrenagens de acionamento da bomba", "caixa de engrenagens do picador", "tdp", "acionamento da bomba"], TREM_ACIONAMENTO]
+  - [["hidráulico", "hidráulica", "acumulador", "cilindro"], HIDRAULICO]
+  - [["freio", "estacionamento"], FREIOS]
+  - [["esteira", "corrente da esteira", "rolete", "roda dentada", "sapata", "eixo traseiro", "eixo dianteiro", "montagem do eixo", "parafusos de impacto"], RODANTE_PNEUS]
+  - [["elétric", "aterramento", "bateria"], ELETRICO]
+  - [["cortador de base", "picador", "elevador", "extrator", "divisor de linha", "lâmina", "faca", "rolo tombador", "rolo de alimentação", "rolo pré-tombador", "rolamentos do rolo"], CORTE_PROCESSAMENTO]
+  - [["cabine", "cinto", "vidro da cabine", "ar-condicionado"], CABINE_ESTRUTURA]
+  - [["motor", "óleo do motor", "filtro de óleo", "injetor", "bico injetor", "termostato", "acoplador do motor"], MOTOR]
+
+default: CHASSI

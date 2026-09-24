@@ -22,7 +22,7 @@ Thumbs.db
 *.log
 
 # ChromaDB local database
-leitura_manual_via_nlp_e_rag/rag/chroma_db/
+campo_seguro/legacy_v1/rag/chroma_db/
 
 # Runtime caches
 .cache/
@@ -35,3 +35,7 @@ leitura_manual_via_nlp_e_rag/rag/chroma_db/
 
 # Temporary reproducibility environment
 .venv_teste/
+
+# Notas internas de processo com IA (não vão para o repositório avaliado)
+CLAUDE.md
+docs/prompt_claude_code.md
