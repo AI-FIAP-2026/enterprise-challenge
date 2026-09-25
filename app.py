@@ -1,4 +1,14 @@
 # -*- coding: utf-8 -*-
+import sys
+
+# Alguns módulos (modelos/, servicos/) imprimem emoji em print() de log/debug.
+# No console padrão do Windows (cp1252) isso derruba o processo com
+# UnicodeEncodeError. Força UTF-8 aqui, no único ponto de entrada, para não
+# depender de quem/como o `streamlit run` é chamado.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+
 import streamlit as st
 import oracledb
 import bcrypt

@@ -225,52 +225,16 @@ JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operad
 JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;MANUTENCAO_PROGRAMADA;FREIOS;VERIFICAR;Fazer a purga dos freios hidráulicos — conforme necessário.;CONDICIONAL;;;;[Conforme Necessário / Direção e Freios] Fazer a purga dos freios hidráulicos;168;MEDIA;;
 JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;MANUTENCAO_PROGRAMADA;RODANTE_PNEUS;VERIFICAR;Verifique a Estrutura de Proteção na Capotagem (EPC) — conforme necessário.;CONDICIONAL;;;;[Conforme Necessário / Rodas e Peças de Fixação] Verifique a Estrutura de Proteção na Capotagem (EPC).;168;MEDIA;;
 JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;MANUTENCAO_PROGRAMADA;RODANTE_PNEUS;LUBRIFICAR;Lubrifique os pontos de engraxamento — conforme necessário.;CONDICIONAL;;;;[Conforme Necessário / Rodas e Peças de Fixação] Lubrifique os pontos de engraxamento.;168;MEDIA;;
-JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Temperatura do motor acima de 113 °C indica superaquecimento — parar e investigar.;TEMPERATURA_MOTOR;113.0;°C;;"verde: 64—112°C (147.2—233.6 F)
-●Faixa de área vermelha: 113—116°C";60;CRITICA;;TEMP_MOTOR
-JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;HIDRAULICO;VERIFICAR;Temperatura do óleo hidráulico acima de 93 °C indica superaquecimento — parar e investigar.;TEMPERATURA_HIDRAULICO;93.0;°C;;"verde: -18°C—92°C (-0.4—197.6°F)
-●Faixa de área vermelha: 93°C—102°C";60;CRITICA;;TEMP_HIDRAULICO
-JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Carga do motor acima de 111% (zona vermelha) — reduzir carga imediatamente.;CARGA_MOTOR;111.0;%;;"verde: 35—100%
-●Faixa de área amarela: 101—110%
-●Faixa de área vermelha: 111—114%";60;CRITICA;;CARGA_MOTOR
-JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Carga do motor entre 101% e 110% (zona amarela) — atenção, aproximando do limite.;CARGA_MOTOR;101.0;%;;"verde: 35—100%
-●Faixa de área amarela: 101—110%
-●Faixa de área vermelha: 111—114%";60;ALTA;;CARGA_MOTOR
-JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Nível de combustível abaixo de 10% — reabastecer em breve.;NIVEL_COMBUSTIVEL;10.0;%;;"nível atingir 10% de
-Visão Geral da Cabine e dos Controles da Colhedora de Cana-de-Açúcar
-25-6
-
-combustível restante";60;MEDIA;;
-JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Nível de DEF (fluido de escapamento) abaixo de 10% — abastecer.;NIVEL_DEF;10.0;%;;"nível atinge 10%, o indicador de nível
-pisca, o alerta soa e aparece uma mensagem que
-indica que o nível de fluido está baixo.
-●Quando o nível atinge 0%";60;ALTA;;
-JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Nível de DEF em 0% — potência do motor fica limitada até reabastecer.;NIVEL_DEF;0.0;%;;"nível atinge 10%, o indicador de nível
-pisca, o alerta soa e aparece uma mensagem que
-indica que o nível de fluido está baixo.
-●Quando o nível atinge 0%";60;CRITICA;;
-JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;CORTE_PROCESSAMENTO;VERIFICAR;Faixa normal de pressão do cortador de base: 0 a 250 bar.;PRESSAO_CORTADOR_BASE;250.0;bar;;"0—25.000 kPa
-(0—250 bar)";60;MEDIA;;
+JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Temperatura do motor acima de 113 °C indica superaquecimento — parar e investigar.;TEMPERATURA_MOTOR;113.0;°C;;verde: 64—112°C (147.2—233.6 F) ●Faixa de área vermelha: 113—116°C;60;CRITICA;;TEMP_MOTOR
+JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;HIDRAULICO;VERIFICAR;Temperatura do óleo hidráulico acima de 93 °C indica superaquecimento — parar e investigar.;TEMPERATURA_HIDRAULICO;93.0;°C;;verde: -18°C—92°C (-0.4—197.6°F) ●Faixa de área vermelha: 93°C—102°C;60;CRITICA;;TEMP_HIDRAULICO
+JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Carga do motor acima de 111% (zona vermelha) — reduzir carga imediatamente.;CARGA_MOTOR;111.0;%;;verde: 35—100% ●Faixa de área amarela: 101—110% ●Faixa de área vermelha: 111—114%;60;CRITICA;;CARGA_MOTOR
+JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Carga do motor entre 101% e 110% (zona amarela) — atenção, aproximando do limite.;CARGA_MOTOR;101.0;%;;verde: 35—100% ●Faixa de área amarela: 101—110% ●Faixa de área vermelha: 111—114%;60;ALTA;;CARGA_MOTOR
+JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Nível de combustível abaixo de 10% — reabastecer em breve.;NIVEL_COMBUSTIVEL;10.0;%;;nível atingir 10% de Visão Geral da Cabine e dos Controles da Colhedora de Cana-de-Açúcar 25-6 combustível restante;60;MEDIA;;
+JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Nível de DEF (fluido de escapamento) abaixo de 10% — abastecer.;NIVEL_DEF;10.0;%;;nível atinge 10%, o indicador de nível pisca, o alerta soa e aparece uma mensagem que indica que o nível de fluido está baixo. ●Quando o nível atinge 0%;60;ALTA;;
+JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Nível de DEF em 0% — potência do motor fica limitada até reabastecer.;NIVEL_DEF;0.0;%;;nível atinge 10%, o indicador de nível pisca, o alerta soa e aparece uma mensagem que indica que o nível de fluido está baixo. ●Quando o nível atinge 0%;60;CRITICA;;
+JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;CORTE_PROCESSAMENTO;VERIFICAR;Faixa normal de pressão do cortador de base: 0 a 250 bar.;PRESSAO_CORTADOR_BASE;250.0;bar;;0—25.000 kPa (0—250 bar);60;MEDIA;;
 JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Deixar o motor em marcha lenta de 3 a 5 minutos antes de aumentar rotação ou desligar.;TEMPO_MARCHA_LENTA;5.0;min;;marcha lenta de 3 a 5 minutos;155;BAIXA;;
 JD-CH950-OMCXT31163-B3;John Deere CH950/CH960 Manual do Operador (OMCXT31163 Ed. B3);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Temperatura normal de operação do motor: 77 a 90 °C.;TEMPERATURA_MOTOR;90.0;°C;;temperatura normal de operação entre 77 e 90 °C;155;BAIXA;;TEMP_MOTOR
-JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Termostato do motor: abertura inicial 80 a 84 °C (nominal 82 °C), totalmente aberto a 94 °C.;TEMPERATURA_MOTOR;94.0;°C;;"80 a 84 °C (175 a 182 °F)
-94 °C";189;MEDIA;;TEMP_MOTOR
-JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;AJUSTAR;Acima de 1675 m de altitude, reduzir os intervalos de troca de óleo/filtro em 50%.;ALTITUDE;1675.0;m;REDUZ_INTERVALO_OLEO_50PCT;"●Uso de um filtro de óleo aprovado pela John
-Deere.
-Intervalos de Serviço do Filtro e do Óleo do Motor
-Enxofre no
-Combustível
-Menos de 5000 mg/kg (5000 ppm)
-Óleos Plus-50
-500 horas de operação
-Outros óleos
-250 horas
-Enxofre no
-Combustível
-5.000–10.000 mg/kg (5.000–10.000 ppm)
-Óleos Plus-50
-250 horas
-Outros óleos
-125 horas de operação
-A análise do óleo pode estender o intervalo de serviço de “outro";161;MEDIA;;
-JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Abaixo de 0 °C, usar combustível diesel formulado para inverno (menor ponto de turvação).;TEMPERATURA_AMBIENTE;0.0;°C;;"temperatura for inferior a 0 °C (32 °F), o
-combustível para inverno";155;MEDIA;;TEMP_AMBIENTE
+JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Termostato do motor: abertura inicial 80 a 84 °C (nominal 82 °C), totalmente aberto a 94 °C.;TEMPERATURA_MOTOR;94.0;°C;;80 a 84 °C (175 a 182 °F) 94 °C;189;MEDIA;;TEMP_MOTOR
+JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;AJUSTAR;Acima de 1675 m de altitude, reduzir os intervalos de troca de óleo/filtro em 50%.;ALTITUDE;1675.0;m;REDUZ_INTERVALO_OLEO_50PCT;●Uso de um filtro de óleo aprovado pela John Deere. Intervalos de Serviço do Filtro e do Óleo do Motor Enxofre no Combustível Menos de 5000 mg/kg (5000 ppm) Óleos Plus-50 500 horas de operação Outros óleos 250 horas Enxofre no Combustível 5.000–10.000 mg/kg (5.000–10.000 ppm) Óleos Plus-50 250 horas Outros óleos 125 horas de operação A análise do óleo pode estender o intervalo de serviço de “outro;161;MEDIA;;
+JD-5060E-OMTR132548-E6;John Deere 5060E/5070E/5080E/5078E/5090E Manual do Operador (OMTR132548 Ed. E6);;;pt;LIMIAR_OPERACIONAL_SENSOR;MOTOR;VERIFICAR;Abaixo de 0 °C, usar combustível diesel formulado para inverno (menor ponto de turvação).;TEMPERATURA_AMBIENTE;0.0;°C;;temperatura for inferior a 0 °C (32 °F), o combustível para inverno;155;MEDIA;;TEMP_AMBIENTE

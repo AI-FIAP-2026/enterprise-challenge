@@ -1,6 +1,6 @@
 # Campo Seguro — Memória do Projeto (módulo NLP + Score de Risco do Equipamento)
 
-> Última atualização: 2026-09-24 · Mantenedor: Heitor Exposito de Sousa. Log de decisões técnicas do módulo NLP + score de risco do equipamento, consolidado incrementalmente ao longo do desenvolvimento (seções 7 e 10 são atualizadas a cada marco concluído).
+> Última atualização: 2026-09-25 · Mantenedor: Heitor Exposito de Sousa. Log de decisões técnicas do módulo NLP + score de risco do equipamento, consolidado incrementalmente ao longo do desenvolvimento (seções 7 e 10 são atualizadas a cada marco concluído).
 
 ---
 
@@ -170,6 +170,13 @@ Enums:
 | 2026-09-24 | Modelo Claude: seguir no atual; reavaliar se escopo mudar | Regra de governança da organização |
 | 2026-09-24 | Documentos de processo com IA (`CLAUDE.md`, `docs/prompt_claude_code.md`) ficam só locais (`.gitignore`), não vão para o repo avaliado | Risco de a banca interpretar como "terceirizado para IA"; a evidência de trabalho fica no `comparativo_v1_vs_deterministico.md` e no log de decisões, não no prompt |
 | 2026-09-24 | Dataset interno (CSV/JSON/XLSX) mantém os 18 campos; `.sql` gerado usa só as 11 colunas reais de `CS_EQUIPAMENTOS_ORIENTACOES` (sem DDL novo) | A tabela real da Nádia não tem os 4 campos extras nem os 4 de metadado do manual; não vamos alterar o schema dela sem alinhar |
+| 2026-09-25 | Prazo final é segunda (28/09) e o Heitor não tem acesso ao computador no fim de semana — tudo que dá pra adiantar, adianta hoje | Restrição de acesso à máquina corporativa |
+| 2026-09-25 | Merge de `origin/main` (Streamlit da Nádia/Vinicius) para dentro da branch do NLP, antecipando a integração da Fase 3 | Só assim dá pra ter "a aplicação de pé" com o módulo de NLP visível no mesmo lugar, dentro do prazo |
+| 2026-09-25 | `CS_EQUIPAMENTOS_ORIENTACOES` populada de verdade no Oracle (239 linhas) com autorização do Heitor/Nádia, via bind variables direto dos objetos Python (não via parse do `.sql` gerado) | Pedido explícito da Nádia; parsear o `.sql` como texto quebrou por causa de campos com quebra de linha embutida (ver correção abaixo) |
+| 2026-09-25 | `extract_thresholds.py` normaliza espaços/quebras de linha em `texto_bruto_original` (regex multi-linha capturava `\n` reais do PDF) | Bug encontrado ao tentar rodar o `.sql` gerado — CSV/JSON toleravam, mas quebrava um parser simples de texto |
+| 2026-09-25 | `pages/4_Orientacoes_Manutencao.py`: cursor manual (`cursor.execute`/`fetchall`) em vez de `pd.read_sql(sql, connection)`, com `.read()` nos campos CLOB **antes** de fechar a conexão | `pd.read_sql` com conexão oracledb crua + CLOB fechado cedo demais dava `DPY-1001: not connected to database`. Confirmado end-to-end pelo Heitor no navegador (239 linhas, filtros e 3 gráficos OK) |
+| 2026-09-25 | `app.py`: força `sys.stdout`/`sys.stderr` para UTF-8 no topo do arquivo | Vários módulos (`modelos/`, `servicos/`) imprimem emoji em `print()`; console Windows padrão (cp1252) derrubava a execução (ex.: modelo de queimadas). Fix único no entry point, sem tocar no código de ninguém — confirmado: modelo de queimadas rodou (75.000 registros, AUC-ROC 0,82) |
+| 2026-09-25 | Achado, não corrigido: `pages/3_Score_Risk.py` consulta `RM568906.EVENTOS_CLIMA` (não existe) e sempre cai no fallback mockado; tabela real é `CS_EVENTOS_CLIMA` mas com schema totalmente diferente (leituras brutas por município/hora, 64M linhas) | Fora do escopo do módulo NLP — é lógica da Nádia/Vinicius; registrado para eles decidirem, não adivinhei a correção |
 
 ---
 
@@ -203,10 +210,13 @@ Enums:
 - [x] Parser CH950 (sumário 95-A…M): 131 itens de `MANUTENCAO_PROGRAMADA`.
 - [x] Parser 5060E (tabela 207-2 a 207-4 + notas a–l): 95 itens.
 - [x] Extrator de limiares de sensor (`extract_thresholds.py`): 13 limiares (10 CH950 + 3 5060E) com página real e regex validada contra o texto do manual.
-- [ ] **Exportação final** CSV/JSON/XLSX/SQL em `outputs/orientacoes/` — próximo passo, é o que a Nádia precisa pra contar linhas.
-- [ ] Mostrar 10 linhas de amostra por manual antes de considerar a exportação "final" (critério de aceite do kickoff).
-- [ ] Confirmar com a Nádia: como calcular "recomendações de manutenção em 5 anos" (peso 0,25) — hoje só temos contagem estática de itens do manual, não itens/5 anos.
-- [ ] Confirmar com a Nádia: estrutura da tabela auxiliar de manuais (`nome_documento_origem, data_publicacao_manual, link_manual, idioma_origem`) e se `pagina_origem, criticidade, sinal_seguranca, sensor_iot` entram como colunas em `CS_EQUIPAMENTOS_ORIENTACOES` ou ficam só no dataset interno do Heitor.
+- [x] **Exportação final** CSV/JSON/XLSX/SQL em `outputs/orientacoes/`.
+- [x] **`CS_EQUIPAMENTOS_ORIENTACOES` populada de verdade no Oracle** (239 linhas, autorizado pela Nádia em 2026-09-25).
+- [x] Estrutura real da tabela auxiliar de manuais descoberta por inspeção direta do Oracle: `CS_EQUIPAMENTOS_MANUAIS` (`ID_EQUIPAMENTO, COD_FONTE_MANUAL, NOME_ARQUIVO, ARQUIVO_PDF [BLOB], DATA_UPLOAD`) — guarda o PDF por **equipamento segurado específico**, não por tipo de manual como memoria assumia. Como `CS_EQUIPAMENTOS_SEGURADOS` está com 0 linhas (nenhum equipamento cadastrado ainda), não dá pra popular isso agora de qualquer forma.
+- [ ] Mostrar 10 linhas de amostra por manual antes de considerar a exportação "final" (critério de aceite do kickoff) — feito de forma ad-hoc no chat, não formalizado.
+- [ ] Confirmar com a Nádia: como calcular "recomendações de manutenção em 5 anos" (peso 0,25) — hoje só temos contagem estática de itens do manual, não itens/5 anos. **Pergunta enviada, sem resposta até 2026-09-25.**
+- [ ] Quando houver equipamentos cadastrados em `CS_EQUIPAMENTOS_SEGURADOS`, popular `CS_EQUIPAMENTOS_MANUAIS` com os PDFs reais (BLOB) por equipamento.
+- [ ] `pagina_origem, criticidade, sinal_seguranca, sensor_iot` continuam só no dataset interno (não existem na tabela real) — sem mudança.
 - [ ] Obter manual Mahindra 6075 (ainda sem fonte real).
 - [ ] *(despriorizado até o prazo da Nádia passar)* Migração das 216 regras v1 → `comparativo_v1_vs_deterministico.md`.
 - [ ] *(despriorizado)* Testes automatizados (pytest com fixtures reais) + CLI reprodutível do zero.
@@ -216,9 +226,9 @@ Enums:
 - [ ] Decidir modelo (LM Studio Gemma ≥ 4B ou API) — apresentar prós/contras e custo antes de rodar.
 
 ### Fase 3 — Score + Alertas
+- [x] Integrar módulo NLP à estrutura da `main` — **antecipado para 2026-09-25** por causa do prazo (merge de `origin/main` para dentro da branch do NLP). Página nova `pages/4_Orientacoes_Manutencao.py`: filtros por equipamento/tipo/subsistema, métricas, 3 gráficos (Altair) e tabela detalhada lendo direto de `CS_EQUIPAMENTOS_ORIENTACOES` no Oracle.
 - [ ] **[D]** Score do equipamento 0–100 (pesos internos a fechar com a Nádia).
-- [ ] **[E]** Ranking e geração de **10–20 alertas** por equipamento (DO_NOT_DO: nunca <10 nem >20).
-- [ ] Integrar módulo NLP à estrutura da `main` (`app.py`, `pages/1_Alertas.py`, `pages/3_Score_Risk.py`, `servicos/`, `pipeline.py`) — a `main` já tem o Streamlit da Nádia/Vini rodando e é o destino final, não vamos criar tela nova.
+- [ ] **[E]** Ranking e geração de **10–20 alertas** por equipamento (DO_NOT_DO: nunca <10 nem >20) — ainda não integrado em `pages/1_Alertas.py`.
 
 ### Fase 4 — ML supervisionado + RAG
 - [ ] **[F]** Dataset simulado + classificador + matriz de confusão/F1/AUC; relatório de validação.

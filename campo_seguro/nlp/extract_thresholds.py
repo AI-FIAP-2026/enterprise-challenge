@@ -32,6 +32,18 @@ def _num(texto: str) -> float:
     return float(texto.replace(".", "").replace(",", "."))
 
 
+def _ws(texto: str) -> str:
+    """Colapsa quebras de linha/espaços múltiplos em um só espaço.
+
+    Necessário porque os regex multi-linha (re.DOTALL) capturam o texto tal
+    como quebra nas páginas do PDF, com \\n literais no meio — isso quebra
+    export.py (CSV/JSON toleram, mas o .sql fica com string cortada em
+    múltiplas linhas físicas, o que quebra um parser ingênuo linha-a-linha
+    do arquivo gerado).
+    """
+    return re.sub(r"\s+", " ", texto).strip()
+
+
 def _texto_paginas(doc: fitz.Document, mapa: dict[str, int], *codigos: str) -> tuple[str, int]:
     """Concatena o texto das páginas pedidas; retorna (texto, pdf_page_da_primeira)."""
     partes = []
@@ -69,7 +81,7 @@ def _limiar(
         metrica_gatilho=metrica_gatilho,
         valor_gatilho=valor_gatilho,
         unidade_medida=unidade_medida,
-        texto_bruto_original=texto_bruto_original.strip(),
+        texto_bruto_original=_ws(texto_bruto_original),
         pagina_origem=pagina_origem,
         criticidade=criticidade,
         sensor_iot=sensor_iot,
@@ -92,7 +104,7 @@ def extrair_limiares_ch950(caminho_pdf: str | Path) -> list[Orientacao]:
             cod_fonte=CH950_COD_FONTE, nome_doc=CH950_NOME_DOC,
             detalhamento="Temperatura do motor acima de 113 °C indica superaquecimento — parar e investigar.",
             metrica_gatilho="TEMPERATURA_MOTOR", valor_gatilho=113.0, unidade_medida="°C",
-            criticidade="CRITICA", sensor_iot="TEMP_MOTOR", pagina_origem=pag_25, texto_bruto_original=m.group(0),
+            criticidade="CRITICA", sensor_iot="TEMP_MOTOR", pagina_origem=pag_25, texto_bruto_original=_ws(m.group(0)),
         ))
 
         m = re.search(r"verde:\s*-18°C[—–-]92°C.*?vermelha:\s*93°C[—–-]102°C", texto_25, re.DOTALL)
@@ -103,7 +115,7 @@ def extrair_limiares_ch950(caminho_pdf: str | Path) -> list[Orientacao]:
             tipo_orientacao="LIMIAR_OPERACIONAL_SENSOR", subsistema="HIDRAULICO", acao_tecnica="VERIFICAR",
             detalhamento_orientacao="Temperatura do óleo hidráulico acima de 93 °C indica superaquecimento — parar e investigar.",
             metrica_gatilho="TEMPERATURA_HIDRAULICO", valor_gatilho=93.0, unidade_medida="°C",
-            texto_bruto_original=m.group(0).strip(), pagina_origem=pag_25, criticidade="CRITICA", sensor_iot="TEMP_HIDRAULICO",
+            texto_bruto_original=_ws(m.group(0)), pagina_origem=pag_25, criticidade="CRITICA", sensor_iot="TEMP_HIDRAULICO",
         ))
 
         m = re.search(r"verde:\s*35[—–-]100%.*?amarela:\s*101[—–-]110%.*?vermelha:\s*111[—–-]114%", texto_25, re.DOTALL)
@@ -113,13 +125,13 @@ def extrair_limiares_ch950(caminho_pdf: str | Path) -> list[Orientacao]:
             cod_fonte=CH950_COD_FONTE, nome_doc=CH950_NOME_DOC,
             detalhamento="Carga do motor acima de 111% (zona vermelha) — reduzir carga imediatamente.",
             metrica_gatilho="CARGA_MOTOR", valor_gatilho=111.0, unidade_medida="%",
-            criticidade="CRITICA", sensor_iot="CARGA_MOTOR", pagina_origem=pag_25, texto_bruto_original=m.group(0),
+            criticidade="CRITICA", sensor_iot="CARGA_MOTOR", pagina_origem=pag_25, texto_bruto_original=_ws(m.group(0)),
         ))
         resultados.append(_limiar(
             cod_fonte=CH950_COD_FONTE, nome_doc=CH950_NOME_DOC,
             detalhamento="Carga do motor entre 101% e 110% (zona amarela) — atenção, aproximando do limite.",
             metrica_gatilho="CARGA_MOTOR", valor_gatilho=101.0, unidade_medida="%",
-            criticidade="ALTA", sensor_iot="CARGA_MOTOR", pagina_origem=pag_25, texto_bruto_original=m.group(0),
+            criticidade="ALTA", sensor_iot="CARGA_MOTOR", pagina_origem=pag_25, texto_bruto_original=_ws(m.group(0)),
         ))
 
         m = re.search(r"n[ií]vel atingir 10% de.*?combust[ií]vel restante", texto_25, re.DOTALL)
@@ -129,7 +141,7 @@ def extrair_limiares_ch950(caminho_pdf: str | Path) -> list[Orientacao]:
             cod_fonte=CH950_COD_FONTE, nome_doc=CH950_NOME_DOC,
             detalhamento="Nível de combustível abaixo de 10% — reabastecer em breve.",
             metrica_gatilho="NIVEL_COMBUSTIVEL", valor_gatilho=10.0, unidade_medida="%",
-            criticidade="MEDIA", sensor_iot=None, pagina_origem=pag_25, texto_bruto_original=m.group(0),
+            criticidade="MEDIA", sensor_iot=None, pagina_origem=pag_25, texto_bruto_original=_ws(m.group(0)),
         ))
 
         m = re.search(r"n[ií]vel atinge 10%.*?n[ií]vel atinge 0%", texto_25, re.DOTALL)
@@ -139,13 +151,13 @@ def extrair_limiares_ch950(caminho_pdf: str | Path) -> list[Orientacao]:
             cod_fonte=CH950_COD_FONTE, nome_doc=CH950_NOME_DOC,
             detalhamento="Nível de DEF (fluido de escapamento) abaixo de 10% — abastecer.",
             metrica_gatilho="NIVEL_DEF", valor_gatilho=10.0, unidade_medida="%",
-            criticidade="ALTA", sensor_iot=None, pagina_origem=pag_25, texto_bruto_original=m.group(0),
+            criticidade="ALTA", sensor_iot=None, pagina_origem=pag_25, texto_bruto_original=_ws(m.group(0)),
         ))
         resultados.append(_limiar(
             cod_fonte=CH950_COD_FONTE, nome_doc=CH950_NOME_DOC,
             detalhamento="Nível de DEF em 0% — potência do motor fica limitada até reabastecer.",
             metrica_gatilho="NIVEL_DEF", valor_gatilho=0.0, unidade_medida="%",
-            criticidade="CRITICA", sensor_iot=None, pagina_origem=pag_25, texto_bruto_original=m.group(0),
+            criticidade="CRITICA", sensor_iot=None, pagina_origem=pag_25, texto_bruto_original=_ws(m.group(0)),
         ))
 
         m = re.search(r"0[—–-]25\.000\s*kPa\s*\(0[—–-]250\s*bar\)", texto_25)
@@ -156,7 +168,7 @@ def extrair_limiares_ch950(caminho_pdf: str | Path) -> list[Orientacao]:
             tipo_orientacao="LIMIAR_OPERACIONAL_SENSOR", subsistema="CORTE_PROCESSAMENTO", acao_tecnica="VERIFICAR",
             detalhamento_orientacao="Faixa normal de pressão do cortador de base: 0 a 250 bar.",
             metrica_gatilho="PRESSAO_CORTADOR_BASE", valor_gatilho=250.0, unidade_medida="bar",
-            texto_bruto_original=m.group(0), pagina_origem=pag_25, criticidade="MEDIA", sensor_iot=None,
+            texto_bruto_original=_ws(m.group(0)), pagina_origem=pag_25, criticidade="MEDIA", sensor_iot=None,
         ))
 
         m = re.search(r"marcha lenta (?:de|por) (\d)\s*(?:a|minutos)?\s*(?:a\s*)?5\s*minutos", texto_45)
@@ -166,7 +178,7 @@ def extrair_limiares_ch950(caminho_pdf: str | Path) -> list[Orientacao]:
             cod_fonte=CH950_COD_FONTE, nome_doc=CH950_NOME_DOC,
             detalhamento="Deixar o motor em marcha lenta de 3 a 5 minutos antes de aumentar rotação ou desligar.",
             metrica_gatilho="TEMPO_MARCHA_LENTA", valor_gatilho=5.0, unidade_medida="min",
-            criticidade="BAIXA", sensor_iot=None, pagina_origem=pag_45, texto_bruto_original=m.group(0),
+            criticidade="BAIXA", sensor_iot=None, pagina_origem=pag_45, texto_bruto_original=_ws(m.group(0)),
         ))
 
         m = re.search(r"temperatura normal de opera[cç][aã]o entre 77 e 90\s*°C", texto_45)
@@ -176,7 +188,7 @@ def extrair_limiares_ch950(caminho_pdf: str | Path) -> list[Orientacao]:
             cod_fonte=CH950_COD_FONTE, nome_doc=CH950_NOME_DOC,
             detalhamento="Temperatura normal de operação do motor: 77 a 90 °C.",
             metrica_gatilho="TEMPERATURA_MOTOR", valor_gatilho=90.0, unidade_medida="°C",
-            criticidade="BAIXA", sensor_iot="TEMP_MOTOR", pagina_origem=pag_45, texto_bruto_original=m.group(0),
+            criticidade="BAIXA", sensor_iot="TEMP_MOTOR", pagina_origem=pag_45, texto_bruto_original=_ws(m.group(0)),
         ))
 
         return resultados
@@ -201,7 +213,7 @@ def extrair_limiares_5060e(caminho_pdf: str | Path) -> list[Orientacao]:
             cod_fonte=TRATOR_5060E_COD_FONTE, nome_doc=TRATOR_5060E_NOME_DOC,
             detalhamento="Termostato do motor: abertura inicial 80 a 84 °C (nominal 82 °C), totalmente aberto a 94 °C.",
             metrica_gatilho="TEMPERATURA_MOTOR", valor_gatilho=94.0, unidade_medida="°C",
-            criticidade="MEDIA", sensor_iot="TEMP_MOTOR", pagina_origem=pag_220, texto_bruto_original=m.group(0),
+            criticidade="MEDIA", sensor_iot="TEMP_MOTOR", pagina_origem=pag_220, texto_bruto_original=_ws(m.group(0)),
         ))
 
         m = re.search(r"altitudes acima de (\d+)\s*m.*?reduza os intervalos.*?50%", texto_205_10, re.DOTALL | re.IGNORECASE)
@@ -215,7 +227,7 @@ def extrair_limiares_5060e(caminho_pdf: str | Path) -> list[Orientacao]:
             detalhamento_orientacao=f"Acima de {m.group(1)} m de altitude, reduzir os intervalos de troca de óleo/filtro em 50%.",
             metrica_gatilho="ALTITUDE", valor_gatilho=float(m.group(1)), unidade_medida="m",
             fator_condicional="REDUZ_INTERVALO_OLEO_50PCT",
-            texto_bruto_original=doc[pag_205_10 - 1].get_text()[:400].strip(),
+            texto_bruto_original=_ws(doc[pag_205_10 - 1].get_text()[:400]),
             pagina_origem=pag_205_10, criticidade="MEDIA", sensor_iot=None,
         ))
 
@@ -226,7 +238,7 @@ def extrair_limiares_5060e(caminho_pdf: str | Path) -> list[Orientacao]:
             cod_fonte=TRATOR_5060E_COD_FONTE, nome_doc=TRATOR_5060E_NOME_DOC,
             detalhamento="Abaixo de 0 °C, usar combustível diesel formulado para inverno (menor ponto de turvação).",
             metrica_gatilho="TEMPERATURA_AMBIENTE", valor_gatilho=0.0, unidade_medida="°C",
-            criticidade="MEDIA", sensor_iot="TEMP_AMBIENTE", pagina_origem=pag_205_4, texto_bruto_original=m.group(0),
+            criticidade="MEDIA", sensor_iot="TEMP_AMBIENTE", pagina_origem=pag_205_4, texto_bruto_original=_ws(m.group(0)),
         ))
 
         return resultados
