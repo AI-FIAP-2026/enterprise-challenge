@@ -10,3 +10,10 @@ sentence-transformers
 chromadb
 streamlit
 openpyxl
+pyyaml
+oracledb
+bcrypt
+altair
+numpy
+scikit-learn
+joblib

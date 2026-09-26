@@ -11,18 +11,37 @@ env/
 
 # Environment files
 .env
+auth.py
 
 # IDE / OS
-.vscode/
+.vscode/*
+!.vscode/extensions.json
 .idea/
 .DS_Store
 Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # Logs
+logs
 *.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node (algum tooling do front usa)
+node_modules
+dist
+dist-ssr
+*.local
 
 # ChromaDB local database
-leitura_manual_via_nlp_e_rag/rag/chroma_db/
+campo_seguro/legacy_v1/rag/chroma_db/
 
 # Runtime caches
 .cache/
@@ -32,6 +51,12 @@ leitura_manual_via_nlp_e_rag/rag/chroma_db/
 # Temporary files
 *.tmp
 *.bak
+old/
+arquivados/
 
 # Temporary reproducibility environment
 .venv_teste/
+
+# Notas internas de processo com IA (não vão para o repositório avaliado)
+CLAUDE.md
+docs/prompt_claude_code.md
