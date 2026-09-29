@@ -113,15 +113,6 @@ final (`docs/Campo_Seguro_Entrega_Final.docx`) e a matriz do score em `docs/Scor
 | **Sprint 2** | Maio/Junho | **Design & Modelo** | Dashboard Streamlit com Score Risk, classificação de alertas, modelo preditivo Prophet e integração Oracle. |
 | **Sprint 3** | **29/06 a 17/07** | **Backend** | Pipeline de dados, integrações INPE e CEMADEN, reestruturação e tratamento do banco, controle de acesso, monitoramento e primeiros modelos preditivos. |
 | **Sprint 4** | **Agosto/Setembro (entrega final)** | **MVP funcional** | Modelos de queimadas e de chuva, Central de Alertas, leitura de manuais (NLP, OCR e IA), cronograma e comprovação das manutenções, Score Risk de 0 a 100 com recomendações e ajuste do prêmio, segurança (LGPD) e registro de uso. |
-### 4. Plano de entregas
-
-| Sprint       | Período | Foco Principal | Entregas Detalhadas                                                                             |
-|:-------------| :--- | :--- |:------------------------------------------------------------------------------------------------|
-| **Sprint 1** | Março/Abril | **Conceituação** | Análise de mercado, definição de personas (João e Mariana) e arquitetura da solução.            |
-| **Sprint 2** | Maio/Junho | **Design & Modelo** | Dashboard Streamlit com Score Risk, classificação de alertas em tempo real, modelo preditivo Prophet e integração Oracle. |
-| **Sprint 3** | **29/06 a 17/07** | **Alertas Real-time** | Integração com APIs do INPE/CPTEC e envio de push notifications de emergência; alertas de sobre eminências de riscos no uso do equipamento.  | 
-| **Sprint 4** | **29/06 a 17/07** | **Inteligência NLP** | Motor de NLP para leitura de manuais, geração de trilhas de manutenção e checklists auditáveis.|
-| **Sprint 5** | **31/08 a 18/09** | **BI & Data Lake** | Dashboards analíticos e integração de dados brutos ao Data Lake da Sompo. |
 
 ### 5. Equipe 👥
 * **Heitor Exposito de Sousa** - RM 566013
