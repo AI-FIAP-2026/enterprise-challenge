@@ -113,6 +113,15 @@ final (`docs/Campo_Seguro_Entrega_Final.docx`) e a matriz do score em `docs/Scor
 | **Sprint 2** | Maio/Junho | **Design & Modelo** | Dashboard Streamlit com Score Risk, classificação de alertas, modelo preditivo Prophet e integração Oracle. |
 | **Sprint 3** | **29/06 a 17/07** | **Backend** | Pipeline de dados, integrações INPE e CEMADEN, reestruturação e tratamento do banco, controle de acesso, monitoramento e primeiros modelos preditivos. |
 | **Sprint 4** | **Agosto/Setembro (entrega final)** | **MVP funcional** | Modelos de queimadas e de chuva, Central de Alertas, leitura de manuais (NLP, OCR e IA), cronograma e comprovação das manutenções, Score Risk de 0 a 100 com recomendações e ajuste do prêmio, segurança (LGPD) e registro de uso. |
+### 4. Plano de entregas
+
+| Sprint       | Período | Foco Principal | Entregas Detalhadas                                                                             |
+|:-------------| :--- | :--- |:------------------------------------------------------------------------------------------------|
+| **Sprint 1** | Março/Abril | **Conceituação** | Análise de mercado, definição de personas (João e Mariana) e arquitetura da solução.            |
+| **Sprint 2** | Maio/Junho | **Design & Modelo** | Dashboard Streamlit com Score Risk, classificação de alertas em tempo real, modelo preditivo Prophet e integração Oracle. |
+| **Sprint 3** | **29/06 a 17/07** | **Alertas Real-time** | Integração com APIs do INPE/CPTEC e envio de push notifications de emergência; alertas de sobre eminências de riscos no uso do equipamento.  | 
+| **Sprint 4** | **29/06 a 17/07** | **Inteligência NLP** | Motor de NLP para leitura de manuais, geração de trilhas de manutenção e checklists auditáveis.|
+| **Sprint 5** | **31/08 a 18/09** | **BI & Data Lake** | Dashboards analíticos e integração de dados brutos ao Data Lake da Sompo. |
 
 ### 5. Equipe 👥
 * **Heitor Exposito de Sousa** - RM 566013
@@ -178,6 +187,28 @@ final (`docs/Campo_Seguro_Entrega_Final.docx`) e a matriz do score em `docs/Scor
 O pipeline também pode rodar pelo terminal: `python pipeline.py`.
 
 ### 8. Vídeo Demonstrativo
+- `pages/`: contém repositórios das páginas criadas para visualização da solução pelos diferentes perfis.
+- `servicos/`: códigos utilizados para coletar dados por APIs e ingerir no banco de dados. Todos os códigos incluídos nessa pasta são automaticamente lidos pelo Pipeline.
+- `modelos/`: repositório com os modelos preditos e aqruivos de 
+- `sql/`: consultas SQL para otimizar os modelos preditivos
+- `referencias/`: pasta contendo os arquivos em CSV utilizados para coletar e tratar dados de repositórios que ainda não dispões de APIs, como os da Defesa Civil.
+- `tratamento/`:
+- `assets/`: imagens, diagramas e recursos visuais da documentação
+- `app.py/`: ponto de entrada (entrypoint) da aplicação web do Campo Seguro. Gerencia o ciclo de vida da interface gráfica utilizando Streamlit, controlando desde a autenticação dos usuários até o roteamento para as diferentes visões do sistema com base nos perfis de acesso
+- `components.py`: componentes padronizados das páginas, como header e footer
+- `pipeline.py`: orquestrador dos serviços internos e externos que são consumidos pela solução. É possível ativar o pipeline a partir da página de Monitoramento do sistema
+- `auth.py`: credenciais do banco Oracle que não foram disponibilizadas por boa prática de segurança
+- `docs/Sompo - Solução Campo Seguro.pdf`: Documentação completa e visualmente formatada da solução (contexto, detalhes técnicos, arquitetura, estrutura de dados, personas, plano de entregas e referências)
+- `docs/Campo Seguro - Sprint 1 - Apresentação.pdf`: Apresentação utilizada para criação do Vídeo Demonstrativo
+- `docs/CS_Sp2_Documentacao.pdf`: Documentação completa da Sprint 2
+- [LEGADO]`src/streamlit_app.py`: Dashboard interativo com Score Risk e Classificação de Alertas
+- [LEGADO]`src/modelo_preditivo.py`: Modelo preditivo Prophet para projeção de riscos
+- [LEGADO]`src/analise_correlacao.py`: Análise de correlação entre variáveis climáticas
+- [LEGADO]`src/atualizacao_clima_1h.py`: Script de atualização horária de dados climáticos
+- [LEGADO]`src/geracao_dataset_dez_anos.py`: Geração de dataset sintético de 10 anos
+- [LEGADO]`src/query.sql`: Consultas SQL para o banco Oracle
+
+### 7. Vídeo Demonstrativo
 
 #### Sprint 1 - Solução completa
 
@@ -197,12 +228,20 @@ https://youtu.be/7iSQ9Hryp2I
 
 ### 9. Documentação de Referência
 
-- Relatório final da Sprint 4: [docs/Campo_Seguro_Entrega_Final.docx](./docs/Campo_Seguro_Entrega_Final.pdf)
+- Relatório final da Sprint 4: [docs/Campo_Seguro_Entrega_Final.pdf](./docs/Campo_Seguro_Entrega_Final.pdf)
 - Diagrama de arquitetura: [docs/arquitetura_solucao.png](./docs/arquitetura_solucao.png)
 - Matriz do Score de Risco: [docs/Score_risco_matriz.md](./docs/Score_risco_matriz.md)
 - Documento original da solução: **[Sompo - Solução Campo Seguro.pdf](./docs/Sompo%20-%20Solu%C3%A7%C3%A3o%20Campo%20Seguro.pdf)**
 
 ### 10. Repositório GitHub
+
+https://github.com/AI-FIAP-2026/enterprise-challenge
+### 8. Documentação de Referência
+
+Para informações técnicas detalhadas, consulte o documento original:
+- **[Sompo - Solução Campo Seguro.pdf](./docs/Sompo%20-%20Solu%C3%A7%C3%A3o%20Campo%20Seguro.pdf)**
+
+### 9. Repositório GitHub
 
 https://github.com/AI-FIAP-2026/enterprise-challenge
 
