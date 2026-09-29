@@ -63,6 +63,56 @@ Nessa sprint, alocamos nossos esforços para organizar a estrutura que irá forn
 - **Síntese e oportunidades de melhoria**: nesse sprint focamos nossos esforços em organizar o projeto, a partir da estruturação do backend. A partir dos resultados já disponíveis, ampliaremos nossa produtividade para avançar mais profundamente nas partes faltantes do projeto e também melhorar nosso modelo preditivo.
 
 
+#### 3.3 Sprint 4 — MVP funcional (entrega final)
+
+A Sprint 4 é a última do projeto. Nela o Campo Seguro passou a funcionar de ponta a ponta: coleta automática, banco Oracle, modelos
+preditivos, regras de negócio e uma aplicação web com login e perfis. A documentação completa está no relatório
+final (`docs/Campo_Seguro_Entrega_Final.docx`) e a matriz do score em `docs/Score_risco_matriz.md`.
+
+- **Arquitetura**: fluxo entrada → banco → modelos → saída, desenhado em `docs/arquitetura_solucao.png`.
+- **Pipeline de dados** (`pipeline.py` + `servicos/`): clima horário e previsão (Open-Meteo), relevo das fazendas,
+  focos de queimada (INPE), alertas hidrológicos e geológicos (CEMADEN), previsões diárias de risco e cálculo diário do
+  score. Cada serviço é incremental, trata os próprios erros e grava o resultado em `CS_PIPELINE_LOGS`.
+- **Modelo preditivo de queimadas** (`modelos/ml_alertas_queimadas_predicao.py`): regras interpretáveis por UF,
+  aprendidas com o clima diário de cada fazenda e os focos do INPE, com validação temporal e métricas de eventos raros
+  (POD, FAR, CSI, ETS, TSS, AUC-ROC). Prevê o risco de amanhã a +3 dias.
+- **Modelos preditivos de chuva** (`modelos/ml_alertas_chuva_predicao.py`): risco hidrológico (inundação, enxurrada,
+  alagamento e chuva intensa) e de deslizamento, a partir da chuva acumulada de 1, 3, 7 e 30 dias, da declividade da
+  fazenda e dos desastres da Defesa Civil e alertas do CEMADEN. Nível pelo ganho sobre a chance normal (Crítico,
+  Alto, Médio) e previsão de amanhã a +3 dias.
+- **Central de Alertas**: mapa e lista por fazenda, com focos próximos, alertas do CEMADEN e o risco previsto de
+  incêndio, hidrológico e de deslizamento, cada um com orientação preventiva.
+- **Leitura de manuais (NLP)**: leitura automática das tabelas de manutenção, OCR (Tesseract) para manuais
+  digitalizados e IA generativa (Claude Sonnet 5, API da Anthropic) com limite de gasto e revisão humana antes de
+  gravar. As recomendações viram o cronograma de manutenção de cada máquina.
+- **Comprovação das manutenções**: revisões por equipamento, envio de comprovantes pelo próprio cliente, leitura mensal
+  do horímetro, validação da Sompo em quatro níveis e gamificação (níveis Ouro, Prata e Bronze).
+- **Score Risk**: 8 itens (cliente, ambiental e operacional) somam de 0 a 100 pontos; Baixo abaixo de 30, Médio de 30
+  a 50 e Alto acima de 50. Mostra ranking por cliente e fazenda, detalhe com recomendações preventivas, risco
+  ambiental mês a mês por estado, indicadores da frota e a sugestão de ajuste do prêmio (-15% a +15%), com a decisão
+  do agente de subscrição registrada. Cada cálculo grava as regras usadas e a medida de cada item.
+- **Segurança e LGPD**: login com bcrypt, três perfis com menu por perfil (Administrador, Analista Sompo e Produtor),
+  dados pessoais criptografados (Fernet), login pelo hash do e-mail, referência do usuário no lugar do nome nos
+  registros e credenciais fora do Git.
+- **Rastreabilidade**: `CS_LOG_ACOES` registra entradas, acessos, execuções, treinos, cálculos, decisões de prêmio,
+  comprovantes e validações, com consulta na página Monitoramento.
+
+**Correções em relação à Sprint 3**
+
+- O modelo hidrológico da sprint anterior era treinado mas não era usado; foi substituído pelos modelos de chuva, que
+  alimentam a Central de Alertas e o Score Risk.
+- Os modelos antigos (Random Forest) e as consultas que só serviam a eles foram retirados do repositório; os novos
+  modelos são interpretáveis e validados fora da amostra.
+- O conteúdo do repositório e o plano de entregas deste README foram atualizados para o que existe de fato.
+
+### 4. Plano de entregas (realizado)
+
+| Sprint       | Período | Foco Principal | Entregas |
+|:-------------| :--- | :--- |:---|
+| **Sprint 1** | Março/Abril | **Conceituação** | Análise de mercado, definição de personas (João e Mariana) e arquitetura da solução. |
+| **Sprint 2** | Maio/Junho | **Design & Modelo** | Dashboard Streamlit com Score Risk, classificação de alertas, modelo preditivo Prophet e integração Oracle. |
+| **Sprint 3** | **29/06 a 17/07** | **Backend** | Pipeline de dados, integrações INPE e CEMADEN, reestruturação e tratamento do banco, controle de acesso, monitoramento e primeiros modelos preditivos. |
+| **Sprint 4** | **Agosto/Setembro (entrega final)** | **MVP funcional** | Modelos de queimadas e de chuva, Central de Alertas, leitura de manuais (NLP, OCR e IA), cronograma e comprovação das manutenções, Score Risk de 0 a 100 com recomendações e ajuste do prêmio, segurança (LGPD) e registro de uso. |
 ### 4. Plano de entregas
 
 | Sprint       | Período | Foco Principal | Entregas Detalhadas                                                                             |
@@ -82,6 +132,61 @@ Nessa sprint, alocamos nossos esforços para organizar a estrutura que irá forn
 
 ### 6. Conteúdo do repositório
 
+- `app.py`: ponto de entrada da aplicação (`streamlit run app.py`); monta o menu só com as páginas do perfil do usuário.
+- `inicio.py`: tela de login e atalhos das páginas do perfil.
+- `components.py`: componentes comuns das páginas (tabela com quebra de texto, controle de acesso, registro de uso).
+- `criptografia.py`: criptografia dos dados pessoais (Fernet) e hash de busca do e-mail.
+- `pipeline.py`: orquestrador dos serviços da pasta `servicos/`; também pode ser executado pela página Monitoramento.
+- `pages/`: uma página por funcionalidade (Cadastro, Alertas, Monitoramento, Score Risk, Programação e Comprovação).
+- `requisitos/`: regras de negócio (score, recomendações, tendências, ajuste do prêmio, risco de chuva, cronograma,
+  comprovação, usuários, auditoria, anexos, manuais e OCR).
+- `servicos/`: serviços executados pelo pipeline (clima, relevo, INPE, CEMADEN, previsões de queimada e de chuva e
+  score diário).
+- `modelos/`: treino e validação dos modelos preditivos de queimadas e de chuva.
+- `campo_seguro/nlp/`: leitores de manuais (automático, por tabela e com IA), normalização e exportação.
+  `campo_seguro/legacy_v1/` guarda a primeira versão da leitura de manuais (não usada pelo app).
+- `tratamento/`: cargas e tratamentos únicos (S2iD, histórico de focos, municípios, dados de teste, usuários de teste,
+  senhas, chave de criptografia e migração dos dados pessoais).
+- `sql/`: `estrutura_banco.sql` (estrutura completa do banco, pode rodar mais de uma vez) e verificação do ambiente.
+- `config/` e `prompts/`: vocabulários da leitura de manuais e instruções da IA.
+- `referencias/`: bases públicas em CSV usadas nas cargas (municípios e Defesa Civil).
+- `docs/`: relatório final da entrega (`Campo_Seguro_Entrega_Final.docx`), diagrama de arquitetura
+  (`arquitetura_solucao.png`) e matriz do Score de Risco (`Score_risco_matriz.md`).
+- `assets/`: logo e o PDF de exemplo dos comprovantes da carga de teste.
+- `requirements.txt`: dependências do app; `requirements-legado.txt`: só para `campo_seguro/legacy_v1`.
+- `auth.py` (não vai para o Git): credenciais do Oracle e chave de criptografia.
+
+### 7. Como executar
+
+1. **Python 3.11** (versão em `.python-version`) e um ambiente virtual:
+   ```bash
+   python -m venv .venv
+   source .venv/bin/activate          # Windows: .venv\Scripts\activate
+   python -m pip install -r requirements.txt
+   ```
+2. **Tesseract** (opcional, só para o OCR de manuais digitalizados): veja as instruções no início do
+   `requirements.txt`.
+3. **Credenciais**: crie o `auth.py` na pasta principal (ele está no `.gitignore`):
+   ```python
+   USER = "usuario_oracle"
+   PASSWORD = "senha_oracle"
+   DSN = "host:porta/servico"
+   CHAVE_CRIPTOGRAFIA = "..."   # gere com: python tratamento/db_gerar_chave_criptografia.py
+   ```
+   Guarde uma cópia da chave: sem ela não há como ler os dados pessoais gravados.
+4. **Banco**: rode `sql/estrutura_banco.sql` no Oracle (F5). Ele cria só o que falta e não apaga dados.
+5. **Dados pessoais já gravados** (bancos antigos): `python tratamento/dados_pessoais_criptografar.py --simular` e,
+   se estiver certo, sem o `--simular`.
+6. **Usuários de teste** (opcional): `python tratamento/criar_operadores_teste.py` e
+   `python tratamento/redefinir_senhas.py` (a senha é digitada no terminal).
+7. **Carga de teste do score** (opcional): `python tratamento/score_dados.py --simular` e depois sem o `--simular`
+   (`--continuar` retoma se a conexão cair).
+8. **Aplicação**: `streamlit run app.py`. Na página Monitoramento, execute o pipeline e treine os modelos
+   (queimadas e chuva); na página Score Risk, calcule o score.
+
+O pipeline também pode rodar pelo terminal: `python pipeline.py`.
+
+### 8. Vídeo Demonstrativo
 - `pages/`: contém repositórios das páginas criadas para visualização da solução pelos diferentes perfis.
 - `servicos/`: códigos utilizados para coletar dados por APIs e ingerir no banco de dados. Todos os códigos incluídos nessa pasta são automaticamente lidos pelo Pipeline.
 - `modelos/`: repositório com os modelos preditos e aqruivos de 
@@ -117,6 +222,20 @@ https://youtu.be/3DVutjk-RAA
 
 https://youtu.be/2iyq1lpY2o4
 
+#### Sprint 4 - MVP funcional (entrega final)
+
+https://youtu.be/7iSQ9Hryp2I
+
+### 9. Documentação de Referência
+
+- Relatório final da Sprint 4: [docs/Campo_Seguro_Entrega_Final.pdf](./docs/Campo_Seguro_Entrega_Final.pdf)
+- Diagrama de arquitetura: [docs/arquitetura_solucao.png](./docs/arquitetura_solucao.png)
+- Matriz do Score de Risco: [docs/Score_risco_matriz.md](./docs/Score_risco_matriz.md)
+- Documento original da solução: **[Sompo - Solução Campo Seguro.pdf](./docs/Sompo%20-%20Solu%C3%A7%C3%A3o%20Campo%20Seguro.pdf)**
+
+### 10. Repositório GitHub
+
+https://github.com/AI-FIAP-2026/enterprise-challenge
 ### 8. Documentação de Referência
 
 Para informações técnicas detalhadas, consulte o documento original:
@@ -124,7 +243,7 @@ Para informações técnicas detalhadas, consulte o documento original:
 
 ### 9. Repositório GitHub
 
-https://github.com/AI-FIAP-2026/enterprise-challenge/tree/campo-seguro-v2
+https://github.com/AI-FIAP-2026/enterprise-challenge
 
 ---
 *Este projeto é uma iniciativa acadêmica em parceria com a Sompo Seguros.*

@@ -1,0 +1,56 @@
+# Metadados de cada faixa/periodicidade de manutenção programada, por equipamento.
+# valor_gatilho em horas (metrica_gatilho=HORIMETRO) ou null (CONDICIONAL/CALENDARIO).
+# fator_condicional codifica equivalente de calendário: OU_CALENDARIO:<DIARIO|SEMANAL|MENSAL|ANUAL|2_ANOS|6_ANOS>
+# ou AMACIAMENTO_UNICA_VEZ (docs/memoria.md §5/§10, kickoff 1.1).
+
+ch950:
+  # códigos de seção do sumário (95-A..M) -> faixa. 95-L e 95-M são a mesma
+  # faixa "conforme necessário" (95-M é a continuação por causa de paginação).
+  95-A: {nome: "Primeiras 100 horas (amaciamento)", valor_gatilho: 100, metrica_gatilho: HORIMETRO, fator_condicional: AMACIAMENTO_UNICA_VEZ}
+  95-B: {nome: "A cada 25 horas ou diariamente", valor_gatilho: 25, metrica_gatilho: HORIMETRO, fator_condicional: "OU_CALENDARIO:DIARIO"}
+  95-C: {nome: "A cada 50 horas", valor_gatilho: 50, metrica_gatilho: HORIMETRO}
+  95-D: {nome: "A cada 100 horas", valor_gatilho: 100, metrica_gatilho: HORIMETRO}
+  95-E: {nome: "A cada 250 horas", valor_gatilho: 250, metrica_gatilho: HORIMETRO}
+  95-F: {nome: "A cada 250 horas (continuação)", valor_gatilho: 250, metrica_gatilho: HORIMETRO}
+  95-G: {nome: "A cada 500 horas", valor_gatilho: 500, metrica_gatilho: HORIMETRO}
+  95-H: {nome: "A cada 1.000 horas", valor_gatilho: 1000, metrica_gatilho: HORIMETRO}
+  95-I: {nome: "A cada 1.500 horas", valor_gatilho: 1500, metrica_gatilho: HORIMETRO}
+  95-J: {nome: "Anualmente ou a cada 3.000 horas", valor_gatilho: 3000, metrica_gatilho: HORIMETRO, fator_condicional: "OU_CALENDARIO:ANUAL"}
+  95-K: {nome: "A cada 6.000 horas", valor_gatilho: 6000, metrica_gatilho: HORIMETRO}
+  95-L: {nome: "Conforme necessário", valor_gatilho: null, metrica_gatilho: CONDICIONAL}
+  95-M: {nome: "Conforme necessário", valor_gatilho: null, metrica_gatilho: CONDICIONAL}
+
+# 5060E: chave = texto normalizado da "Periodicidade" tal como aparece na
+# tabela 207-2..4 (ver campo_seguro/nlp/parse_interval_tables.py:normalizar_periodicidade).
+tratores_5060e:
+  "periodo de amaciamento": {nome: "Período de Amaciamento", valor_gatilho: null, metrica_gatilho: CONDICIONAL, fator_condicional: AMACIAMENTO_UNICA_VEZ}
+  "primeiras 500 horas de operacao": {nome: "Primeiras 500 Horas de Operação", valor_gatilho: 500, metrica_gatilho: HORIMETRO, fator_condicional: AMACIAMENTO_UNICA_VEZ}
+  "diariamente ou a cada 10 horas de operacao": {nome: "Diariamente ou a Cada 10 Horas de Operação", valor_gatilho: 10, metrica_gatilho: HORIMETRO, fator_condicional: "OU_CALENDARIO:DIARIO"}
+  "semanalmente ou a cada 50 horas": {nome: "Semanalmente ou a Cada 50 Horas", valor_gatilho: 50, metrica_gatilho: HORIMETRO, fator_condicional: "OU_CALENDARIO:SEMANAL"}
+  "a cada 125 horas": {nome: "A Cada 125 Horas", valor_gatilho: 125, metrica_gatilho: HORIMETRO}
+  "mensalmente ou a cada 200 horas de operacao": {nome: "Mensalmente ou a Cada 200 Horas de Operação", valor_gatilho: 200, metrica_gatilho: HORIMETRO, fator_condicional: "OU_CALENDARIO:MENSAL"}
+  "a cada 250 horas de operacao": {nome: "A Cada 250 Horas de Operação", valor_gatilho: 250, metrica_gatilho: HORIMETRO}
+  "a cada 400 horas de operacao": {nome: "A Cada 400 Horas de Operação", valor_gatilho: 400, metrica_gatilho: HORIMETRO}
+  "a cada 500 horas de operacao": {nome: "A Cada 500 Horas de Operação", valor_gatilho: 500, metrica_gatilho: HORIMETRO}
+  "a cada 750 horas de operacao": {nome: "A Cada 750 Horas de Operação", valor_gatilho: 750, metrica_gatilho: HORIMETRO}
+  "anualmente": {nome: "Anualmente", valor_gatilho: null, metrica_gatilho: CALENDARIO, fator_condicional: "OU_CALENDARIO:ANUAL"}
+  "a cada 2 anos ou 1500 horas de operacao": {nome: "A Cada 2 Anos ou 1.500 Horas de Operação", valor_gatilho: 1500, metrica_gatilho: HORIMETRO, fator_condicional: "OU_CALENDARIO:2_ANOS"}
+  "a cada 2 anos ou 2000 horas de operacao": {nome: "A Cada 2 Anos ou 2.000 Horas de Operação", valor_gatilho: 2000, metrica_gatilho: HORIMETRO, fator_condicional: "OU_CALENDARIO:2_ANOS"}
+  "a cada 6 anos ou 6000 horas de operacao": {nome: "A Cada 6 Anos ou 6.000 Horas de Operação", valor_gatilho: 6000, metrica_gatilho: HORIMETRO, fator_condicional: "OU_CALENDARIO:6_ANOS"}
+  "conforme necessario": {nome: "Conforme Necessário", valor_gatilho: null, metrica_gatilho: CONDICIONAL}
+
+# Notas de rodapé do 5060E (207-4), letra -> texto da condição.
+# Preservadas em texto_bruto_original; resumidas em fator_condicional como NOTA_<letra>.
+tratores_5060e_notas:
+  a: "Execute também os procedimentos Diariamente ou a Cada 10 e 50 Horas de Operação (amaciamento)."
+  b: "Se o trator operar em condições de umidade ou lama."
+  c: "Somente para tratores com tração nas quatro rodas (4WD)."
+  d: "Somente Transmissão Sincronizada do Eixo Superior."
+  e: "Diesel com enxofre 5.000-10.000 ppm e óleos como John Deere Torq-Gard."
+  f: "Somente tratores com tração em duas rodas (2WD)."
+  g: "Diesel com enxofre inferior a 5.000 ppm e óleos como John Deere Torq-Gard."
+  h: "Diesel com enxofre 5.000-10.000 ppm e óleos Plus-50."
+  i: "Se equipado com filtros de carbono ativado."
+  j: "Diesel com enxofre inferior a 5.000 ppm e óleos Plus-50."
+  k: "Se o líquido de arrefecimento Cool-Gard II ou Cool-Gard II PG NÃO for usado."
+  l: "Se o líquido de arrefecimento Cool-Gard II ou Cool-Gard II PG for usado."

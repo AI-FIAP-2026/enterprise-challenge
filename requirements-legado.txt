@@ -1,0 +1,5 @@
+# Só para o código antigo em campo_seguro/legacy_v1 (RAG com busca vetorial). O app não precisa destes pacotes.
+# sentence-transformers instala o PyTorch (download grande).
+sentence-transformers
+chromadb
+tqdm

@@ -1,3 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment files
+.env
+auth.py
+
+# IDE / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
 # Logs
 logs
 *.log
@@ -7,24 +34,33 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Node (algum tooling do front usa)
 node_modules
 dist
 dist-ssr
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
+# ChromaDB local database
+campo_seguro/legacy_v1/rag/chroma_db/
 
-venv/
-__pycache__/
+# Runtime caches
+.cache/
+.pytest_cache/
+.mypy_cache/
+
+# Temporary files
+*.tmp
+*.bak
 old/
 arquivados/
-auth.py
+
+# Temporary reproducibility environment
+.venv_teste/
+
+# Notas internas de processo com IA (não vão para o repositório avaliado)
+CLAUDE.md
+docs/prompt_claude_code.md
+docs/memoria.md
+
+# Streamlit: config.toml vai para o repositório; secrets.toml (credenciais) não
+.streamlit/secrets.toml

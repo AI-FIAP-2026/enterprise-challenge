@@ -1,0 +1,4 @@
+[server]
+# Tamanho máximo de arquivo enviado (MB): manuais até 70 MB; comprovantes e notas fiscais até 10 MB
+# (os limites por tipo são conferidos em requisitos/anexos.py)
+maxUploadSize = 70
