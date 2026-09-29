@@ -1,0 +1,36 @@
+# Campo Seguro - dependências (Python 3.11; o código também roda em versões mais novas)
+# Instalação: python -m pip install -r requirements.txt
+
+# Aplicação web, banco Oracle e dados
+# streamlit 1.46 ou mais novo: menu com grupos (st.navigation) montado no app.py
+streamlit>=1.46
+oracledb
+pandas
+numpy
+# jinja2: formatação das tabelas com quebra de texto (components.tabela usa o Styler do pandas)
+jinja2
+altair
+pydeck
+# requests: APIs Open-Meteo, INPE e CEMADEN (serviços do pipeline)
+requests
+
+# Segurança: senhas (bcrypt) e dados pessoais criptografados (cryptography/Fernet)
+bcrypt
+cryptography
+
+# Leitura de manuais (NLP), comprovantes e IA
+# pymupdf também faz o OCR dos manuais digitalizados (requisitos/manuais_ocr.py), mas precisa do programa
+# Tesseract instalado no sistema (não vem pelo pip), com os idiomas português e inglês:
+#   Mac:     brew install tesseract tesseract-lang
+#   Windows: instalador do Tesseract (UB Mannheim), marcando o idioma Portuguese
+#   Linux:   sudo apt install tesseract-ocr tesseract-ocr-por
+# Sem o Tesseract o app funciona normalmente; só o botão "Aplicar OCR" avisa que falta a instalação.
+pymupdf
+pyyaml
+anthropic
+pydantic
+# openpyxl: exportação das recomendações em Excel (campo_seguro/nlp/export.py)
+openpyxl
+
+# Código antigo da leitura de manuais (campo_seguro/legacy_v1: busca vetorial com RAG) não é usado pelo app.
+# Para rodá-lo: python -m pip install -r requirements-legado.txt
