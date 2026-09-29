@@ -193,18 +193,18 @@ https://youtu.be/2iyq1lpY2o4
 
 #### Sprint 4 - MVP funcional (entrega final)
 
-(link do vídeo a incluir)
+https://youtu.be/7iSQ9Hryp2I
 
 ### 9. Documentação de Referência
 
-- Relatório final da Sprint 4: [docs/Campo_Seguro_Entrega_Final.docx](./docs/Campo_Seguro_Entrega_Final.docx)
+- Relatório final da Sprint 4: [docs/Campo_Seguro_Entrega_Final.docx](./docs/Campo_Seguro_Entrega_Final.pdf)
 - Diagrama de arquitetura: [docs/arquitetura_solucao.png](./docs/arquitetura_solucao.png)
 - Matriz do Score de Risco: [docs/Score_risco_matriz.md](./docs/Score_risco_matriz.md)
 - Documento original da solução: **[Sompo - Solução Campo Seguro.pdf](./docs/Sompo%20-%20Solu%C3%A7%C3%A3o%20Campo%20Seguro.pdf)**
 
 ### 10. Repositório GitHub
 
-https://github.com/AI-FIAP-2026/enterprise-challenge/tree/campo-seguro-v2
+https://github.com/AI-FIAP-2026/enterprise-challenge
 
 ---
 *Este projeto é uma iniciativa acadêmica em parceria com a Sompo Seguros.*
