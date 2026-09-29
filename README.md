@@ -175,40 +175,14 @@ final (`docs/Campo_Seguro_Entrega_Final.docx`) e a matriz do score em `docs/Scor
    ```
    Guarde uma cópia da chave: sem ela não há como ler os dados pessoais gravados.
 4. **Banco**: rode `sql/estrutura_banco.sql` no Oracle (F5). Ele cria só o que falta e não apaga dados.
-5. **Dados pessoais já gravados** (bancos antigos): `python tratamento/dados_pessoais_criptografar.py --simular` e,
-   se estiver certo, sem o `--simular`.
-6. **Usuários de teste** (opcional): `python tratamento/criar_operadores_teste.py` e
-   `python tratamento/redefinir_senhas.py` (a senha é digitada no terminal).
-7. **Carga de teste do score** (opcional): `python tratamento/score_dados.py --simular` e depois sem o `--simular`
+5. **Carga de teste do score** (opcional): `python tratamento/score_dados.py --simular` e depois sem o `--simular`
    (`--continuar` retoma se a conexão cair).
-8. **Aplicação**: `streamlit run app.py`. Na página Monitoramento, execute o pipeline e treine os modelos
+6. **Aplicação**: `streamlit run app.py`. Na página Monitoramento, execute o pipeline e treine os modelos
    (queimadas e chuva); na página Score Risk, calcule o score.
 
 O pipeline também pode rodar pelo terminal: `python pipeline.py`.
 
 ### 8. Vídeo Demonstrativo
-- `pages/`: contém repositórios das páginas criadas para visualização da solução pelos diferentes perfis.
-- `servicos/`: códigos utilizados para coletar dados por APIs e ingerir no banco de dados. Todos os códigos incluídos nessa pasta são automaticamente lidos pelo Pipeline.
-- `modelos/`: repositório com os modelos preditos e aqruivos de 
-- `sql/`: consultas SQL para otimizar os modelos preditivos
-- `referencias/`: pasta contendo os arquivos em CSV utilizados para coletar e tratar dados de repositórios que ainda não dispões de APIs, como os da Defesa Civil.
-- `tratamento/`:
-- `assets/`: imagens, diagramas e recursos visuais da documentação
-- `app.py/`: ponto de entrada (entrypoint) da aplicação web do Campo Seguro. Gerencia o ciclo de vida da interface gráfica utilizando Streamlit, controlando desde a autenticação dos usuários até o roteamento para as diferentes visões do sistema com base nos perfis de acesso
-- `components.py`: componentes padronizados das páginas, como header e footer
-- `pipeline.py`: orquestrador dos serviços internos e externos que são consumidos pela solução. É possível ativar o pipeline a partir da página de Monitoramento do sistema
-- `auth.py`: credenciais do banco Oracle que não foram disponibilizadas por boa prática de segurança
-- `docs/Sompo - Solução Campo Seguro.pdf`: Documentação completa e visualmente formatada da solução (contexto, detalhes técnicos, arquitetura, estrutura de dados, personas, plano de entregas e referências)
-- `docs/Campo Seguro - Sprint 1 - Apresentação.pdf`: Apresentação utilizada para criação do Vídeo Demonstrativo
-- `docs/CS_Sp2_Documentacao.pdf`: Documentação completa da Sprint 2
-- [LEGADO]`src/streamlit_app.py`: Dashboard interativo com Score Risk e Classificação de Alertas
-- [LEGADO]`src/modelo_preditivo.py`: Modelo preditivo Prophet para projeção de riscos
-- [LEGADO]`src/analise_correlacao.py`: Análise de correlação entre variáveis climáticas
-- [LEGADO]`src/atualizacao_clima_1h.py`: Script de atualização horária de dados climáticos
-- [LEGADO]`src/geracao_dataset_dez_anos.py`: Geração de dataset sintético de 10 anos
-- [LEGADO]`src/query.sql`: Consultas SQL para o banco Oracle
-
-### 7. Vídeo Demonstrativo
 
 #### Sprint 1 - Solução completa
 
@@ -234,14 +208,6 @@ https://youtu.be/7iSQ9Hryp2I
 - Documento original da solução: **[Sompo - Solução Campo Seguro.pdf](./docs/Sompo%20-%20Solu%C3%A7%C3%A3o%20Campo%20Seguro.pdf)**
 
 ### 10. Repositório GitHub
-
-https://github.com/AI-FIAP-2026/enterprise-challenge
-### 8. Documentação de Referência
-
-Para informações técnicas detalhadas, consulte o documento original:
-- **[Sompo - Solução Campo Seguro.pdf](./docs/Sompo%20-%20Solu%C3%A7%C3%A3o%20Campo%20Seguro.pdf)**
-
-### 9. Repositório GitHub
 
 https://github.com/AI-FIAP-2026/enterprise-challenge
 
